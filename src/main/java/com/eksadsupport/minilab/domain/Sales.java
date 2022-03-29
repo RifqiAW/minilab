@@ -25,7 +25,7 @@ public class Sales {
     private Dealer dealer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="sales_id")
+    @JoinColumn(name="supervisor_id")
     @JsonIgnore
     private Sales supervisor;
 
@@ -36,6 +36,8 @@ public class Sales {
     @Size(max=10)
     @Column(name = "sales_status")
     private String salesStatus;
+
+//    @OneToMany(mappedBy = "supervisor")
 
     public String getSalesId() {
         return salesId;

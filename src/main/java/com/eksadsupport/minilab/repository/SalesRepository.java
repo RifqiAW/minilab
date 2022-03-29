@@ -23,6 +23,6 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
     @Query(value = "select * from mst_sales where dealer_code = ?1 and lower(sales_status) = ?2 and lower(sales_name) like '%?3%' limit ?4 offset ?5", nativeQuery = true)
     List<Sales> listAll(String dealerCode, String salesStatus, String salesName, int limit, int offset);
 
-    @Query(value = "select * from from mst_sales where sales_id = ?1 LIMIT 1")
+    @Query(value = "select * from from mst_sales where sales_id = ?1 LIMIT 1", nativeQuery = true)
     Sales getBySalesId(String salesId);
 }
