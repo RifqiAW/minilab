@@ -20,7 +20,7 @@ public class Customer {
     @ManyToOne(fetch = FetchType.LAZY)
     @Size(min = 0,max = 50)
     @JoinColumn(name = "dealer_code",nullable = false)
-    private String dealerId;
+    private Dealer dealerId;
 
     @Size(min = 0,max = 4)
     @Column(name = "customer_gender")
@@ -76,11 +76,11 @@ public class Customer {
         this.customerName = customerName;
     }
 
-    public String getDealerId() {
+    public Dealer getDealerId() {
         return dealerId;
     }
 
-    public void setDealerId(String dealerId) {
+    public void setDealerId(Dealer dealerId) {
         this.dealerId = dealerId;
     }
 
