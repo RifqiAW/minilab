@@ -12,59 +12,60 @@ public class Dealer {
 
     @Id
     @Size(max = 50)
-    private String dealer_code;
+    @Column(name = "dealer_code")
+    private String dealerId;
 
     @Column(name = "dealerName")
-    private String dealer_name;
+    private String dealerName;
 
     @Column(name = "dealerClass")
     @Size(max = 10)
-    private String dealer_class;
+    private String dealerClass;
 
     @Column(name = "telpNumber")
-    private String telp_number;
+    private String telpNumber;
 
     @Column(name = "alamat")
     private String alamat;
 
     @Column(name = "dealerStatus")
     @Size(max = 10)
-    private String dealer_status;
+    private String dealerStatus;
 
     @Column(name = "dealerExtCode")
     @Size(max = 50)
-    private String dealer_ext_code;
+    private String dealerExtCode;
 
-    public String getDealer_code() {
-        return dealer_code;
+    public String getDealerId() {
+        return dealerId;
     }
 
-    public void setDealer_code(String dealer_code) {
-        this.dealer_code = dealer_code;
+    public void setDealerId(String dealerId) {
+        this.dealerId = dealerId;
     }
 
-    public String getDealer_name() {
-        return dealer_name;
+    public String getDealerName() {
+        return dealerName;
     }
 
-    public void setDealer_name(String dealer_name) {
-        this.dealer_name = dealer_name;
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
     }
 
-    public String getDealer_class() {
-        return dealer_class;
+    public String getDealerClass() {
+        return dealerClass;
     }
 
-    public void setDealer_class(String dealer_class) {
-        this.dealer_class = dealer_class;
+    public void setDealerClass(String dealerClass) {
+        this.dealerClass = dealerClass;
     }
 
-    public String getTelp_number() {
-        return telp_number;
+    public String getTelpNumber() {
+        return telpNumber;
     }
 
-    public void setTelp_number(String telp_number) {
-        this.telp_number = telp_number;
+    public void setTelpNumber(String telpNumber) {
+        this.telpNumber = telpNumber;
     }
 
     public String getAlamat() {
@@ -75,19 +76,19 @@ public class Dealer {
         this.alamat = alamat;
     }
 
-    public String getDealer_status() {
-        return dealer_status;
+    public String getDealerStatus() {
+        return dealerStatus;
     }
 
-    public void setDealer_status(String dealer_status) {
-        this.dealer_status = dealer_status;
+    public void setDealerStatus(String dealerStatus) {
+        this.dealerStatus = dealerStatus;
     }
 
-    public String getDealer_ext_code() {
-        return dealer_ext_code;
+    public String getDealerExtCode() {
+        return dealerExtCode;
     }
 
-    public void setDealer_ext_code(String dealer_ext_code) {
-        this.dealer_ext_code = dealer_ext_code;
+    public void setDealerExtCode(String dealerExtCode) {
+        this.dealerExtCode = dealerExtCode;
     }
 }
