@@ -1,5 +1,14 @@
 package com.eksadsupport.minilab.Common;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.Map;
 
 public class Util {
@@ -21,5 +30,30 @@ public class Util {
             return true;
         }
         return false;
+    }
+
+    public boolean checkIfValidEmail(String s){
+        if(s.matches("^(.+)@(\\S+)$")){
+            return true;
+        }
+        return false;
+    }
+
+    public String generateId(){
+        return new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(new Date());
+    }
+
+    public boolean isValidId(String dateStr) {
+        DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+        sdf.setLenient(false);
+        try {
+//            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSS");
+//            dateFormatter.parse(dateStr);
+            sdf.parse(dateStr);
+        }
+        catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 }

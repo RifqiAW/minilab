@@ -38,6 +38,17 @@ public class Sales {
     @Column(name = "sales_status")
     private String salesStatus;
 
+    @Column(name = "sales_gender")
+    private String salesGender;
+
+    public String getSalesGender() {
+        return salesGender;
+    }
+
+    public void setSalesGender(String salesGender) {
+        this.salesGender = salesGender;
+    }
+
     public String getSalesId() {
         return salesId;
     }
