@@ -22,7 +22,7 @@ public class Customer {
 
     @Size(min = 0,max = 50)
     @Column(name = "dealer_code",nullable = false)
-    private String dealerCode;
+    private String dealerId;
 
     @Size(min = 0,max = 4)
     @Column(name = "customer_gender")
@@ -77,12 +77,12 @@ public class Customer {
         this.customerName = customerName;
     }
 
-    public String getDealerCode() {
-        return dealerCode;
+    public String getDealerId() {
+        return dealerId;
     }
 
-    public void setDealerCode(String dealerCode) {
-        this.dealerCode = dealerCode;
+    public void setDealerId(String dealerId) {
+        this.dealerId = dealerId;
     }
 
     public String getCustomerGender() {
