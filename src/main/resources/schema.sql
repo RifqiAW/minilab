@@ -45,3 +45,16 @@ CREATE VIEW vw_mst_sales AS select * from mst_sales
 --    FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code),
 --    FOREIGN KEY (sales_id) REFERENCES mst_sales(sales_id),
 --    FOREIGN KEY (customer_id) REFERENCES mst_customer(customer_id))
+
+--CREATE TABLE IF NOT EXISTS mst_ppn(
+--    ppn_id VARCHAR(50) NOT NULL,
+--    Description VARCHAR(255) NOT NULL,
+--    dealer_code VARCHAR(50) NOT NULL,
+--    effective_start_date Date NOT NULL,
+--    effective_end_date Date,
+--    ppn_rate float(8) NOT NULL,
+--    ppn_rate_previous float(8),
+--    ppn_status VARCHAR(10) NOT NULL CHECK(ppn_status IN ('ACTIVE', 'INACTIVE')),
+--    PRIMARY KEY (ppn_id),
+--    FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code)
+
