@@ -1,12 +1,11 @@
 package com.eksadsupport.minilab.dto.dealer;
 
 
-import java.util.Optional;
-
-public class DealerById {
-
+import com.eksadsupport.minilab.domain.Dealer;
 
 import java.util.Optional;
+
+
 
     public class DealerById {
 

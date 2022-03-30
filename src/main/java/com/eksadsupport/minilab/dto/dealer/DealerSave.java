@@ -4,11 +4,6 @@ import com.eksadsupport.minilab.domain.Dealer;
 
 import java.util.List;
 
-public class DealerSave {
-
-
-import java.util.List;
-
     public class DealerSave {
 
         String code;
