@@ -46,18 +46,19 @@ public class DealerService {
         return getdealer;
     }
 
-    public DealerListAll dealerListAll(String dealerId, String dealerStatus, String dealerName, int limit, int offset){
+    public DealerListAll dealerListAll(String dealerId,String dealerStatus,String dealerName,int limit, int offset){
         DealerListAll getDealerList = new DealerListAll();
 
-        List<Dealer>
-                opt = dr.ViewDealer(dealerId,dealerStatus,dealerName,limit,offset);
+        List<Dealer> opt = dr.ViewDealer(dealerId,dealerStatus,dealerName,limit,offset);
 
-        //opt = dr.ViewDealer2(dealerId,dealerStatus,dealerName,limit,offset);
+        //opt = dr.SelectDealer(dealerId,dealerStatus,dealerName,limit,offset);
         getDealerList.setStatus(Constants.STATUS);
         getDealerList.setCode(Constants.CODE);
         getDealerList.setMessage(Constants.MESSAGE);
         getDealerList.setData(opt);
-        getDealerList.setDataOfRecord(2);
+        getDealerList.setDataOfRecord(limit);
         return getDealerList;
     }
+
+
 }

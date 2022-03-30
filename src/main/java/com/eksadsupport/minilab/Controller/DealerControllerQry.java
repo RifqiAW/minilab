@@ -40,11 +40,12 @@ public class DealerControllerQry {
         respon.add(dealerListAll);
 
         return new ResponseEntity<>(respon, HttpStatus.OK);
+
     }
 
-    @GetMapping("get")
+    @GetMapping("get/{dealerId}")
     public ResponseEntity<List>getDealerbyId(
-            @RequestParam(required = false,value = "dealerId")String dealerId
+            @PathVariable String dealerId
     ){
         respon = new ArrayList<>();
         Optional<Dealer>cek = ds.findbyID(dealerId);
@@ -62,7 +63,7 @@ public class DealerControllerQry {
 
                 return new ResponseEntity<>(respon, HttpStatus.OK);
             }
-        }catch (NoSuchElementException e){
+        }catch (Exception e){
             respon.add("204. DATA NOT FOUND");
             return new ResponseEntity<>(respon, HttpStatus.NOT_FOUND);
         }
