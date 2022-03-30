@@ -19,14 +19,13 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
     @Transactional
     Sales save(String salesId, String salesName, String dealerId, String supervisorId, String salesGender, String salesEmail, String salesStatus);
 
-    @Modifying
-    @Query(value = "update mst_sales set sales_name = ?2, dealer_code = ?3, supervisor_id = ?4, sales_gender = ?5, sales_email = ?6, sales_status = ?7 where sales_id = ?1", nativeQuery = true)
+    @Query(value = "update mst_sales set sales_name = ?2, dealer_code = ?3, supervisor_id = ?4, sales_gender = ?5, sales_email = ?6, sales_status = ?7 where sales_id = ?1 returning *", nativeQuery = true)
     @Transactional
-    void update(String salesId, String salesName, String dealerId, String supervisorId, String salesGender, String salesEmail, String salesStatus);
+    Sales update(String salesId, String salesName, String dealerId, String supervisorId, String salesGender, String salesEmail, String salesStatus);
 
     @Query(value = "select * from vw_mst_sales where dealer_code = ?1 and sales_status = ?2 and sales_name = ?3 limit ?4 offset ?5", nativeQuery = true)
     List<Sales> listAll(String dealerId, String salesStatus, String salesName, int limit, int offset);
 
-    @Query(value = "select * from from mst_sales where sales_id = ?1 LIMIT 1", nativeQuery = true)
+    @Query(value = "select * from mst_sales where sales_id = ?1", nativeQuery = true)
     Sales getBySalesId(String salesId);
 }

@@ -1,5 +1,6 @@
 package com.eksadsupport.minilab.Controller;
 
+import com.eksadsupport.minilab.Common.Util;
 import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ public class SalesController {
     @PostMapping("/save")
     public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload){
         try{
-            String salesId = inputPayload.get("salesId").toString();
+            Util util = new Util();
+
+            String salesId = util.valueToStringOrEmpty(inputPayload, "salesId");
             String salesName = inputPayload.get("salesName").toString();
             String dealerId = inputPayload.get("dealerId").toString();
             String supervisorId = inputPayload.get("supervisorId").toString();
@@ -28,10 +31,20 @@ public class SalesController {
             String salesEmail = inputPayload.get("salesEmail").toString();
             String salesStatus = inputPayload.get("salesStatus").toString();
 
-            Sales sales = ss.saveSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+            if(!util.checkStringIfAlphabets(salesName)){
+                return new ResponseEntity<>("tidak valid", HttpStatus.BAD_REQUEST);
+            }
+
+            if(util.checkStringIfNulllOrEmpty(salesId)){
+                Sales sales = ss.saveSales("tempSalesId", salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+                return new ResponseEntity<>(sales, HttpStatus.OK);
+            }
+
+            Sales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
 
             return new ResponseEntity<>(sales, HttpStatus.OK);
-        }catch (Exception e){
+        }
+        catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>("tidak valid", HttpStatus.BAD_REQUEST);
         }
@@ -47,6 +60,19 @@ public class SalesController {
             int limit = Integer.parseInt(inputPayload.get("limit").toString());
 
             List<Sales> sales = ss.listAll(dealerId, salesStatus, salesName, limit, offset);
+
+            return new ResponseEntity<>(sales, HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("tidak valid", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get/{salesId}")
+    public ResponseEntity<Object> get(@PathVariable String salesId){
+        try{
+
+            Sales sales = ss.get(salesId);
 
             return new ResponseEntity<>(sales, HttpStatus.OK);
         }catch (Exception e){
