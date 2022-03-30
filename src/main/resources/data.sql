@@ -1,1 +1,1 @@
-insert into mst_sales(sales_id, sales_name, supervisor_id, sales_gender, sales_email, sales_status) values ('M1', 'Offline', 'M1', 'GTLK', 'asd', 'INACTIVE');
+insert into mst_sales(sales_id, sales_name, supervisor_id, sales_gender, sales_email, sales_status) values ('M1', 'Offline', NULL, 'GTLK', 'asd', 'INACTIVE');

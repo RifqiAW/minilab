@@ -1,6 +1,11 @@
---CREATE TABLE IF NOT EXISTS mst_sales(sales_id VARCHAR(50) NOT NULL, sales_name VARCHAR(255) NOT NULL, supervisor_id VARCHAR(50) NOT NULL, sales_gender VARCHAR(4) NOT NULL CHECK(sales_gender IN ('GTLK', 'GTPR')), sales_email VARCHAR(255) NOT NULL, sales_status VARCHAR(10) NOT NULL CHECK(sales_status IN ('ACTIVE', 'INACTIVE')), PRIMARY KEY (sales_id), FOREIGN KEY (supervisor_id) REFERENCES mst_sales(sales_id))
+DROP TABLE IF EXISTS mst_sales CASCADE
+DROP VIEW IF EXISTS vw_mst_sales CASCADE
 
-CREATE TABLE IF NOT EXISTS mst_sales(sales_id VARCHAR(50) NOT NULL, sales_name VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, supervisor_id VARCHAR(50) NOT NULL, sales_gender VARCHAR(4) NOT NULL CHECK(sales_gender IN ('GTLK', 'GTPR')), sales_email VARCHAR(255) NOT NULL, sales_status VARCHAR(10) NOT NULL CHECK(sales_status IN ('ACTIVE', 'INACTIVE')), PRIMARY KEY (sales_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code), FOREIGN KEY (supervisor_id) REFERENCES mst_sales(sales_id))
+CREATE TABLE IF NOT EXISTS mst_sales(sales_id VARCHAR(50) NOT NULL, sales_name VARCHAR(255) NOT NULL, supervisor_id VARCHAR(50), sales_gender VARCHAR(4) NOT NULL CHECK(sales_gender IN ('GTLK', 'GTPR')), sales_email VARCHAR(255) NOT NULL, sales_status VARCHAR(10) NOT NULL CHECK(sales_status IN ('ACTIVE', 'INACTIVE')), PRIMARY KEY (sales_id), FOREIGN KEY (supervisor_id) REFERENCES mst_sales(sales_id))
+
+--CREATE TABLE IF NOT EXISTS mst_sales(sales_id VARCHAR(50) NOT NULL, sales_name VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, supervisor_id VARCHAR(50), sales_gender VARCHAR(4) NOT NULL CHECK(sales_gender IN ('GTLK', 'GTPR')), sales_email VARCHAR(255) NOT NULL, sales_status VARCHAR(10) NOT NULL CHECK(sales_status IN ('ACTIVE', 'INACTIVE')), PRIMARY KEY (sales_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code), FOREIGN KEY (supervisor_id) REFERENCES mst_sales(sales_id))
+
+CREATE VIEW vw_mst_sales AS select * from mst_sales
 
 --CREATE TABLE IF NOT EXISTS mst_sales(
 --    sales_id VARCHAR(50) NOT NULL,

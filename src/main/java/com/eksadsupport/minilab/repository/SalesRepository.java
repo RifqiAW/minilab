@@ -20,7 +20,7 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
     @Transactional
     void update(String salesId, String salesName, String dealerCode, String supervisorId, String salesGender, String salesEmail, String salesStatus);
 
-    @Query(value = "select * from mst_sales where dealer_code = ?1 and lower(sales_status) = ?2 and lower(sales_name) like '%?3%' limit ?4 offset ?5", nativeQuery = true)
+    @Query(value = "select * from vw_mst_sales where dealer_code = ?1 and lower(sales_status) = ?2 and lower(sales_name) like '%?3%' limit ?4 offset ?5", nativeQuery = true)
     List<Sales> listAll(String dealerCode, String salesStatus, String salesName, int limit, int offset);
 
     @Query(value = "select * from from mst_sales where sales_id = ?1 LIMIT 1", nativeQuery = true)

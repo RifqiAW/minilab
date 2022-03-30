@@ -19,10 +19,10 @@ public class Sales {
     @Column(name = "sales_name")
     private String salesName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="dealer_code")
-    @JsonIgnore
-    private Dealer dealer;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="dealer_code")
+//    @JsonIgnore
+//    private Dealer dealer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="supervisor_id")
@@ -55,13 +55,13 @@ public class Sales {
         this.salesName = salesName;
     }
 
-    public Dealer getDealer() {
-        return dealer;
-    }
-
-    public void setDealer(Dealer dealer) {
-        this.dealer = dealer;
-    }
+//    public Dealer getDealer() {
+//        return dealer;
+//    }
+//
+//    public void setDealer(Dealer dealer) {
+//        this.dealer = dealer;
+//    }
 
     public Sales getSupervisor() {
         return supervisor;
