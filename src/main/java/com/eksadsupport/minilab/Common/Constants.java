@@ -1,4 +1,4 @@
-package com.eksadsupport.minilab.common;
+package com.eksadsupport.minilab.Common;
 
 public class Constants {
     public static String STATUS = "S";
