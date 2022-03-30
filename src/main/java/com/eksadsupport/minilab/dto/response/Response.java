@@ -8,25 +8,6 @@ public class Response {
     private String status;
     private Object data;
 
-    public void responseBadRequest(){
-        this.code = "400";
-        this.message = "Process Failed";
-        this.status = "F";
-    }
-
-    public void responseNoContent(){
-        this.code = "204";
-        this.message = "Process Failed";
-        this.status = "F";
-    }
-
-    public void responseSuccess(Object obj){
-        this.code = "201";
-        this.message = "Process Succeed";
-        this.status = "S";
-        this.data = obj;
-    }
-
     public String getCode() {
         return code;
     }

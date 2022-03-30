@@ -3,6 +3,9 @@ package com.eksadsupport.minilab.Controller;
 import com.eksadsupport.minilab.Common.Util;
 import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.dto.response.Response;
+import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
+import com.eksadsupport.minilab.dto.response.ResponseNoContent;
+import com.eksadsupport.minilab.dto.response.ResponseSuccess;
 import com.eksadsupport.minilab.dto.sales.GetListSales;
 import com.eksadsupport.minilab.dto.sales.GetSales;
 import com.eksadsupport.minilab.service.SalesService;
@@ -28,7 +31,6 @@ public class SalesController {
 
     @PostMapping("/save")
     public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload){
-        Response response = new Response();
         try{
             Util util = new Util();
 
@@ -41,44 +43,36 @@ public class SalesController {
             String salesStatus = inputPayload.get("salesStatus").toString();
 
             if(!util.checkStringIfAlphabets(salesName) || !util.checkIfValidEmail(salesEmail)){
-                response.responseBadRequest();
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
 
             if(util.checkStringIfNulllOrEmpty(salesId)){
                 GetSales sales = ss.saveSales(util.generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
-                response.responseSuccess(sales);
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }
 
             Optional<Sales> opt = ss.findBySalesId(salesId);
 
             if(!opt.isPresent()){
-                response.responseNoContent();
-                return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }
 
             if(!util.isValidId(salesId)){
-                System.out.println("invalid salesId");
-                response.responseBadRequest();
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
 
             GetSales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
 
-            response.responseSuccess(sales);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
         }
         catch (Exception e){
             e.printStackTrace();
-            response.responseBadRequest();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/listAll")
     public ResponseEntity<Object> listAll(@RequestBody Map<String, Object> inputPayload){
-        Response response = new Response();
         try{
             String salesName = inputPayload.get("salesName").toString();
             String dealerId = inputPayload.get("dealerId").toString();
@@ -109,36 +103,27 @@ public class SalesController {
             getListSales.setListSales(getSalesList);
             getListSales.setDataOfRecord(sales.size());
 
-//            return new ResponseEntity<>(sales, HttpStatus.OK);
-            response.responseSuccess(getListSales);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseSuccess(getListSales), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
-            response.responseBadRequest();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{salesId}")
     public ResponseEntity<Object> get(@PathVariable String salesId){
-        Response response = new Response();
         try{
             Optional<Sales> opt = ss.findBySalesId(salesId);
 
             if(!opt.isPresent()){
-                response.responseNoContent();
-                return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }
 
             GetSales sales = ss.get(salesId);
-
-            response.responseSuccess(sales);
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
-            response.responseBadRequest();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
     }
 }
