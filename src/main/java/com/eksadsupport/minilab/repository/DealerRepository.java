@@ -23,12 +23,13 @@ public interface DealerRepository extends JpaRepository<Dealer,String > {
     Optional<Dealer > DealerById(String dealerId);
 
     @Query(value = "select * from public.mst_dealer where mst_dealer.dealer_code like %:dealerId% and mst_dealer.dealer_status =:dealerStatus and mst_dealer.dealer_name like %:dealerName% limit :limit offset :offset" ,nativeQuery = true)
-    List<Dealer> ViewDealer(String dealerId,String dealerStatus,String dealerName,int limit, int offset);
+    List<Dealer> SelectDealer(String dealerId, String dealerStatus, String dealerName, int limit, int offset);
 
-    @Query(value = "select * from vw_mst_dealer where mst_dealer.dealer_code like %:dealerId% and mst_dealer.dealer_status =:dealerStatus and mst_dealer.dealer_name like %:dealerName% limit :limit offset :offset" ,nativeQuery = true)
-    List<Dealer> ViewDealer2(String dealerId,String dealerStatus,String dealerName,int limit, int offset);
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and dealer_status =:dealerStatus and dealer_name like %:dealerName% limit :limit offset :offset" ,nativeQuery = true)
+    List<Dealer> ViewDealer(String dealerId,String dealerStatus,String dealerName,int limit, int offset);
 
     Optional<Dealer> findById(String dealerId);
 
 
 }
+
