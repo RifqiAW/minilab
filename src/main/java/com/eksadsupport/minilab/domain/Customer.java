@@ -1,9 +1,6 @@
 package com.eksadsupport.minilab.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
@@ -20,8 +17,9 @@ public class Customer {
     @Column(name = "customer_name",nullable = false)
     private String customerName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @Size(min = 0,max = 50)
-    @Column(name = "dealer_code",nullable = false)
+    @JoinColumn(name = "dealer_code",nullable = false)
     private String dealerId;
 
     @Size(min = 0,max = 4)
@@ -53,9 +51,10 @@ public class Customer {
     @Column(name = "customer_hp_number")
     private String customerHpNumber;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @Size(min = 0,max = 50)
-    @Column(name = "sales_id",nullable = false)
-    private String salesId;
+    @JoinColumn(name = "sales_id",nullable = false)
+    private Sales salesId;
 
     @Size(min = 0,max = 10)
     @Column(name = "customer_status",nullable = false)
@@ -141,11 +140,11 @@ public class Customer {
         this.customerHpNumber = customerHpNumber;
     }
 
-    public String getSalesId() {
+    public Sales getSalesId() {
         return salesId;
     }
 
-    public void setSalesId(String salesId) {
+    public void setSalesId(Sales salesId) {
         this.salesId = salesId;
     }
 
