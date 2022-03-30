@@ -1,9 +1,8 @@
 package com.eksadsupport.minilab.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -13,6 +12,16 @@ public class Order {
     @Id
     @Size(max = 50)
     private String orderId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="sales_id")
+    @JsonIgnore
+    private Sales sales;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="customer_id")
+    @JsonIgnore
+    private Customer customer;
 
     @Column(name = "minimum_payment")
     private double minimumPayment;
