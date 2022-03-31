@@ -1,6 +1,8 @@
 package com.eksadsupport.minilab.repository;
 
 import com.eksadsupport.minilab.domain.Dealer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,8 +30,10 @@ public interface DealerRepository extends JpaRepository<Dealer,String > {
     @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and dealer_status =:dealerStatus and dealer_name like %:dealerName% limit :limit offset :offset" ,nativeQuery = true)
     List<Dealer> ViewDealer(String dealerId,String dealerStatus,String dealerName,int limit, int offset);
 
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and dealer_status =:dealerStatus and dealer_name like %:dealerName% limit :limit offset :offset" ,nativeQuery = true)
+    Page<Dealer> ListAllDealer(String dealerId, String dealerStatus, String dealerName, Pageable pageable);
+
     Optional<Dealer> findById(String dealerId);
 
 
 }
-
