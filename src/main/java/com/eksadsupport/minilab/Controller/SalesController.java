@@ -119,7 +119,7 @@ public class SalesController {
 
             GetListSales getListSales = new GetListSales();
             getListSales.setListSales(getSalesList);
-            getListSales.setDataOfRecord(sales.size());
+            getListSales.setDataOfRecord(pages.getTotalPages());
 
             return new ResponseEntity<>(new ResponseSuccess(getListSales), HttpStatus.OK);
         }catch (Exception e){
