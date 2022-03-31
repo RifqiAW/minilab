@@ -13,37 +13,37 @@ import java.util.Map;
 
 public class Util {
 
-    public boolean checkStringIfNulllOrEmpty(String s){
+    public static boolean checkStringIfNulllOrEmpty(String s){
         if(s.isEmpty() || s == null){
             return true;
         }
         return false;
     }
 
-    public String valueToStringOrEmpty(Map<String, ?> map, String key) {
+    public static String valueToStringOrEmpty(Map<String, ?> map, String key) {
         Object value = map.get(key);
         return value == null ? "" : value.toString();
     }
 
-    public boolean checkStringIfAlphabets(String s){
+    public static boolean checkStringIfAlphabets(String s){
         if(s.replaceAll("\\s+", "").matches("[a-zA-Z]+")){
             return true;
         }
         return false;
     }
 
-    public boolean checkIfValidEmail(String s){
+    public static boolean checkIfValidEmail(String s){
         if(s.matches("^(.+)@(\\S+)$")){
             return true;
         }
         return false;
     }
 
-    public String generateId(){
+    public static String generateId(){
         return new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(new Date());
     }
 
-    public boolean isValidId(String dateStr) {
+    public static boolean isValidId(String dateStr) {
         DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
         sdf.setLenient(false);
         try {

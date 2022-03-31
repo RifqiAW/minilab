@@ -1,5 +1,6 @@
 package com.eksadsupport.minilab.Controller;
 
+import com.eksadsupport.minilab.Common.Constants;
 import com.eksadsupport.minilab.Common.Util;
 import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.dto.response.Response;
@@ -11,6 +12,7 @@ import com.eksadsupport.minilab.dto.sales.GetSales;
 import com.eksadsupport.minilab.model.SalesSpecs;
 import com.eksadsupport.minilab.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.eksadsupport.minilab.Common.Util.*;
+
 @RestController
 @RequestMapping("ddms/v1/cmd/master/sales")
 public class SalesController {
@@ -33,9 +37,7 @@ public class SalesController {
     @PostMapping("/save")
     public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload){
         try{
-            Util util = new Util();
-
-            String salesId = util.valueToStringOrEmpty(inputPayload, "salesId");
+            String salesId = valueToStringOrEmpty(inputPayload, "salesId");
             String salesName = inputPayload.get("salesName").toString();
             String dealerId = inputPayload.get("dealerId").toString();
             String supervisorId = inputPayload.get("supervisorId").toString();
@@ -43,12 +45,12 @@ public class SalesController {
             String salesEmail = inputPayload.get("salesEmail").toString();
             String salesStatus = inputPayload.get("salesStatus").toString();
 
-            if(!util.checkStringIfAlphabets(salesName) || !util.checkIfValidEmail(salesEmail)){
+            if(!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail)){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
 
-            if(util.checkStringIfNulllOrEmpty(salesId)){
-                GetSales sales = ss.saveSales(util.generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+            if(checkStringIfNulllOrEmpty(salesId)){
+                GetSales sales = ss.saveSales(generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
                 return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }
 
@@ -58,7 +60,7 @@ public class SalesController {
                 return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }
 
-            if(!util.isValidId(salesId)){
+            if(!isValidId(salesId)){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
 
@@ -72,18 +74,30 @@ public class SalesController {
         }
     }
 
+    @Value("${property.max_limit}")
+    public int CONSTANTS_MAX_LIMIT;
+
     @PostMapping("/listAll")
     public ResponseEntity<Object> listAll(@RequestBody Map<String, Object> inputPayload){
-        Util util = new Util();
         try{
-            String salesName = util.valueToStringOrEmpty(inputPayload, "salesName");
-            String dealerId = util.valueToStringOrEmpty(inputPayload, "dealerId");
-            String salesStatus = util.valueToStringOrEmpty(inputPayload, "salesStatus");
-            int offset = Integer.parseInt(inputPayload.get("offset").toString());
-            int limit = Integer.parseInt(inputPayload.get("limit").toString());
+            String salesName = valueToStringOrEmpty(inputPayload, "salesName");
+            String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
+            String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus");
+            String offset_s = valueToStringOrEmpty(inputPayload, "offset");
+            String limit_s = valueToStringOrEmpty(inputPayload, "limit");
+
+            int offset = 0;
+            int limit = CONSTANTS_MAX_LIMIT;
 
             if(salesName.isEmpty() && dealerId.isEmpty() && salesStatus.isEmpty()){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
+
+            if(!limit_s.isEmpty()){
+                limit = Integer.parseInt(limit_s);
+            }
+            if(!offset_s.isEmpty()){
+                offset = Integer.parseInt(offset_s);
             }
 
             Pageable paging = PageRequest.of(offset, limit);
