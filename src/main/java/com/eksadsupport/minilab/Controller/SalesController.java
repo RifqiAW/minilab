@@ -1,5 +1,6 @@
 package com.eksadsupport.minilab.Controller;
 
+import com.eksadsupport.minilab.Common.Constants;
 import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
@@ -38,11 +39,11 @@ public class SalesController {
             String salesEmail = valueToStringOrEmpty(inputPayload, "salesEmail");
             String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus");
 
-//            if(!checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
-//                || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
-//                || checkStringIfNulllOrEmpty(salesStatus))){
-//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-//            }
+            if(!checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
+                || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
+                || checkStringIfNulllOrEmpty(salesStatus))){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
 
             if(checkStringIfNulllOrEmpty(salesId)){
                 if(supervisorId.isEmpty()){
@@ -66,13 +67,6 @@ public class SalesController {
                 if(dealerId.isEmpty()){
                     dealerId = opt.get().getDealer().getDealerId();
                 }
-//                if(supervisorId.isEmpty()){
-//                    try{
-//                        supervisorId = opt.get().getSupervisor().getSalesId();
-//                    }catch (Exception e){
-//                        supervisorId = null;
-//                    }
-//                }
                 if(salesGender.isEmpty()){
                     salesGender = opt.get().getSalesGender();
                 }
@@ -84,11 +78,6 @@ public class SalesController {
                 }
             }
 
-//            if(!isValidId(salesId)){
-//                System.out.println(salesId);
-//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-//            }
-
             if(supervisorId.isEmpty()){
                 GetSales sales = ss.updateSales(salesId, salesName, dealerId, null, salesGender, salesEmail, salesStatus);
 
@@ -97,6 +86,59 @@ public class SalesController {
                 GetSales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
                 return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }
+
+//            Map<String, Object> args = new HashMap<>();
+//
+//            for(String s: Constants.SALES_ARGS){
+//                args.put(s, valueToStringOrEmpty(inputPayload, s));
+//            }
+//            if(!checkStringIfNulllOrEmpty(args.get("salesId").toString()) && (!checkStringIfAlphabets(args.get("salesName").toString()) || !checkIfValidEmail(args.get("salesEmail").toString()) || checkStringIfNulllOrEmpty(args.get("salesName").toString())
+//                    || checkStringIfNulllOrEmpty(args.get("dealerId").toString()) || checkStringIfNulllOrEmpty(args.get("salesGender").toString()) || checkStringIfNulllOrEmpty(args.get("salesEmail").toString())
+//                    || checkStringIfNulllOrEmpty(args.get("salesStatus").toString()))){
+//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+//            }
+//
+//            if(checkStringIfNulllOrEmpty(salesId)){
+//                if(supervisorId.isEmpty()){
+//                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, null, salesGender, salesEmail, salesStatus);
+//
+//                    return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+//                }else{
+//                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+//                    return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+//                }
+//            }
+//
+//            Optional<Sales> opt = ss.findBySalesId(salesId);
+//
+//            if(!opt.isPresent()){
+//                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
+//            }else{
+//                if(salesName.isEmpty()){
+//                    salesName = opt.get().getSalesName();
+//                }
+//                if(dealerId.isEmpty()){
+//                    dealerId = opt.get().getDealer().getDealerId();
+//                }
+//                if(salesGender.isEmpty()){
+//                    salesGender = opt.get().getSalesGender();
+//                }
+//                if(salesEmail.isEmpty()){
+//                    salesEmail = opt.get().getSalesEmail();
+//                }
+//                if(salesStatus.isEmpty()){
+//                    salesStatus = opt.get().getSalesStatus();
+//                }
+//            }
+//
+//            if(supervisorId.isEmpty()){
+//                GetSales sales = ss.updateSales(salesId, salesName, dealerId, null, salesGender, salesEmail, salesStatus);
+//
+//                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+//            }else{
+//                GetSales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+//                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+//            }
         }
         catch (Exception e){
             e.printStackTrace();
