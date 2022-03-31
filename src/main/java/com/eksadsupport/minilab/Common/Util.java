@@ -42,7 +42,7 @@ public class Util {
 
     public static String generateId(){
         return LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSS"));
+                .format(DateTimeFormatter.ofPattern("yyyyMMddhh24mmssSSSSS"));
 
 //        return new SimpleDateFormat("yyyyMMddHHmmssSSSSS").format(new Date());
     }
