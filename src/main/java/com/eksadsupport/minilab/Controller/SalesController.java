@@ -1,7 +1,6 @@
 package com.eksadsupport.minilab.Controller;
 
 import com.eksadsupport.minilab.domain.Sales;
-import com.eksadsupport.minilab.domain.ViewAllSales;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
@@ -32,35 +31,72 @@ public class SalesController {
     public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload){
         try{
             String salesId = valueToStringOrEmpty(inputPayload, "salesId");
-            String salesName = inputPayload.get("salesName").toString();
-            String dealerId = inputPayload.get("dealerId").toString();
-            String supervisorId = inputPayload.get("supervisorId").toString();
-            String salesGender = inputPayload.get("salesGender").toString();
-            String salesEmail = inputPayload.get("salesEmail").toString();
-            String salesStatus = inputPayload.get("salesStatus").toString();
+            String salesName = valueToStringOrEmpty(inputPayload, "salesName");
+            String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
+            String supervisorId = valueToStringOrEmpty(inputPayload, "supervisorId");
+            String salesGender = valueToStringOrEmpty(inputPayload, "salesGender");
+            String salesEmail = valueToStringOrEmpty(inputPayload, "salesEmail");
+            String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus");
 
-            if(!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail)){
-                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-            }
+//            if(!checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
+//                || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
+//                || checkStringIfNulllOrEmpty(salesStatus))){
+//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+//            }
 
             if(checkStringIfNulllOrEmpty(salesId)){
-                GetSales sales = ss.saveSales(generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
-                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+                if(supervisorId.isEmpty()){
+                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, null, salesGender, salesEmail, salesStatus);
+
+                    return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+                }else{
+                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+                    return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+                }
             }
 
             Optional<Sales> opt = ss.findBySalesId(salesId);
 
             if(!opt.isPresent()){
                 return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
+            }else{
+                if(salesName.isEmpty()){
+                    salesName = opt.get().getSalesName();
+                }
+                if(dealerId.isEmpty()){
+                    dealerId = opt.get().getDealer().getDealerId();
+                }
+//                if(supervisorId.isEmpty()){
+//                    try{
+//                        supervisorId = opt.get().getSupervisor().getSalesId();
+//                    }catch (Exception e){
+//                        supervisorId = null;
+//                    }
+//                }
+                if(salesGender.isEmpty()){
+                    salesGender = opt.get().getSalesGender();
+                }
+                if(salesEmail.isEmpty()){
+                    salesEmail = opt.get().getSalesEmail();
+                }
+                if(salesStatus.isEmpty()){
+                    salesStatus = opt.get().getSalesStatus();
+                }
             }
 
-            if(!isValidId(salesId)){
-                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+//            if(!isValidId(salesId)){
+//                System.out.println(salesId);
+//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+//            }
+
+            if(supervisorId.isEmpty()){
+                GetSales sales = ss.updateSales(salesId, salesName, dealerId, null, salesGender, salesEmail, salesStatus);
+
+                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+            }else{
+                GetSales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }
-
-            GetSales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
-
-            return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -96,46 +132,28 @@ public class SalesController {
 
             Pageable paging = PageRequest.of(offset, limit);
 
-//            Page<Sales> pages = ss.listBy(dealerId, salesStatus, salesName, paging);
             Page<Sales> pages = ss.listViewBy(dealerId, salesStatus, salesName, paging);
-//            Page<ViewAllSales> pages = ss.listViewBy(dealerId, salesStatus, salesName, paging);
 
             List<Sales> sales = pages.getContent();
-//            List<ViewAllSales> sales = pages.getContent();
 
             List<GetSales> getSalesList = new ArrayList<>();
 
             for(Sales sale:sales){
-                GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
-                        sale.getDealer().getDealerId(), sale.getSupervisor().getSalesId(),
-                        sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
+                try{
+                    GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
+                            sale.getDealer().getDealerId(), sale.getSupervisor().getSalesId(),
+                            sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
 
-                getSalesList.add(getSales);
+                    getSalesList.add(getSales);
+                }catch (Exception e){
+                    GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
+                            sale.getDealer().getDealerId(), null,
+                            sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
+
+                    getSalesList.add(getSales);
+                }
+
             }
-
-
-//            ArrayList<ViewAllSales> arr = new ArrayList<ViewAllSales>(sales.size());
-//            for(int i=0; i < sales.size(); i++){
-//                ViewAllSales sale = sales.get(i);
-//                new ViewAllSales(sale.getId(), sale.getSalesId(), sale.getSalesName(), "222", "aaa", "bbb", "ccc", "ddd")
-//                System.out.println(sale);
-//                GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
-//                        sale.getDealer(), sale.getSupervisor(),
-//                        sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
-//
-//                getSalesList.add(getSales);
-//            }
-
-//            for(ViewAllSales sale:sales){
-//                System.out.println(sale.getSalesId());
-//                System.out.println(sale.getDealer());
-//                System.out.println(sale.getSupervisor());
-//                GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
-//                        sale.getDealer(), sale.getSupervisor(),
-//                        sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
-//
-//                getSalesList.add(getSales);
-//            }
 
             GetListSales getListSales = new GetListSales();
             getListSales.setListSales(getSalesList);

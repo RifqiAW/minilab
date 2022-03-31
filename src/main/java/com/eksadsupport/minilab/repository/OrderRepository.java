@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Modifying
@@ -18,4 +20,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Transactional
     void update(String orderId, String unitCode, String dealerId, String salesId, String customerId, double minimumPayment, double totalValue, double orderValue, double offtheroadValue, double orderTotalDiscount, double ppn, String platNomor, String nomorMesin, String nomorRangka, String isLeasing, String paymentStatus, String unitStatus);
 
+    Optional<Order> findByOrderId(String id);
 }

@@ -14,6 +14,11 @@ public class Order {
     private String orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="dealer_code")
+    @JsonIgnore
+    private Dealer dealer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sales_id")
     @JsonIgnore
     private Sales sales;

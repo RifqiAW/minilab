@@ -43,17 +43,12 @@ public class Util {
     public static String generateId(){
         return LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyyMMddhh24mmssSSSSS"));
-
-//        return new SimpleDateFormat("yyyyMMddHHmmssSSSSS").format(new Date());
     }
 
     public static boolean isValidId(String dateStr) {
-//        DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSSS");
-//        sdf.setLenient(false);
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSS");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddhh24mmssSSSSS");
             dateFormatter.parse(dateStr);
-//            sdf.parse(dateStr);
         }
         catch (DateTimeParseException e) {
             return false;
