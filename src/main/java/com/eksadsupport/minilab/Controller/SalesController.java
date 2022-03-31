@@ -1,6 +1,7 @@
 package com.eksadsupport.minilab.Controller;
 
 import com.eksadsupport.minilab.domain.Sales;
+import com.eksadsupport.minilab.domain.ViewAllSales;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
@@ -98,9 +99,12 @@ public class SalesController {
 
             Pageable paging = PageRequest.of(offset, limit);
 
-            Page<Sales> pages = ss.listBy(dealerId, salesStatus, salesName, paging);
+//            Page<Sales> pages = ss.listBy(dealerId, salesStatus, salesName, paging);
+            Page<Sales> pages = ss.listViewBy(dealerId, salesStatus, salesName, paging);
+//            Page<ViewAllSales> pages = ss.listViewBy(dealerId, salesStatus, salesName, paging);
 
             List<Sales> sales = pages.getContent();
+//            List<ViewAllSales> sales = pages.getContent();
 
             List<GetSales> getSalesList = new ArrayList<>();
 
@@ -111,6 +115,17 @@ public class SalesController {
 
                 getSalesList.add(getSales);
             }
+
+//            for(ViewAllSales sale:sales){
+//                System.out.println(sale.getSalesId());
+//                System.out.println(sale.getDealer());
+//                System.out.println(sale.getSupervisor());
+//                GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
+//                        sale.getDealer(), sale.getSupervisor(),
+//                        sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
+//
+//                getSalesList.add(getSales);
+//            }
 
             GetListSales getListSales = new GetListSales();
             getListSales.setListSales(getSalesList);

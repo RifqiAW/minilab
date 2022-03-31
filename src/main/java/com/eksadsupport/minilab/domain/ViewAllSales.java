@@ -1,49 +1,35 @@
 package com.eksadsupport.minilab.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jdk.nashorn.internal.ir.annotations.Immutable;
+import org.hibernate.annotations.Subselect;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "mst_sales")
-public class Sales {
+@Immutable
+@Table(name = "`vw_mst_sales`")
+@Subselect("select uuid() as id, ms.* from mst_sales ms")
+public class ViewAllSales {
 
     @Id
-    @Size(max = 50)
+    private long id;
+
     private String salesId;
-
-    @Size(max = 255)
-    @Column(name = "sales_name")
     private String salesName;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="dealer_code")
-    @JsonIgnore
-    private Dealer dealer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="supervisor_id")
-    @JsonIgnore
-    private Sales supervisor;
-
-    @Size(max=4)
-    @Column(name = "sales_email")
+    private String dealer;
+    private String supervisor;
     private String salesEmail;
-
-    @Size(max=10)
-    @Column(name = "sales_status")
     private String salesStatus;
-
-    @Column(name = "sales_gender")
     private String salesGender;
 
-    public String getSalesGender() {
-        return salesGender;
+    public long getId() {
+        return id;
     }
 
-    public void setSalesGender(String salesGender) {
-        this.salesGender = salesGender;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getSalesId() {
@@ -62,19 +48,19 @@ public class Sales {
         this.salesName = salesName;
     }
 
-    public Dealer getDealer() {
+    public String getDealer() {
         return dealer;
     }
 
-    public void setDealer(Dealer dealer) {
+    public void setDealer(String dealer) {
         this.dealer = dealer;
     }
 
-    public Sales getSupervisor() {
+    public String getSupervisor() {
         return supervisor;
     }
 
-    public void setSupervisor(Sales supervisor) {
+    public void setSupervisor(String supervisor) {
         this.supervisor = supervisor;
     }
 
@@ -92,5 +78,13 @@ public class Sales {
 
     public void setSalesStatus(String salesStatus) {
         this.salesStatus = salesStatus;
+    }
+
+    public String getSalesGender() {
+        return salesGender;
+    }
+
+    public void setSalesGender(String salesGender) {
+        this.salesGender = salesGender;
     }
 }

@@ -1,26 +1,26 @@
 package com.eksadsupport.minilab.model;
 
-import com.eksadsupport.minilab.domain.Sales;
+import com.eksadsupport.minilab.domain.ViewAllSales;
 import org.springframework.data.jpa.domain.Specification;
+
 import java.util.Locale;
 
-public class SalesSpecs {
-
-    public static Specification<Sales> salesNameContains(String salesName){
+public class ViewSalesSpecs {
+    public static Specification<ViewAllSales> salesNameContains(String salesName){
         return ((root, query, criteriaBuilder) ->
                 salesName.isEmpty() ?
-                    criteriaBuilder.conjunction() :
-                    criteriaBuilder.like(criteriaBuilder.upper(root.get("salesName")), "%"+salesName.toUpperCase(Locale.ROOT)+"%"));
+                        criteriaBuilder.conjunction() :
+                        criteriaBuilder.like(criteriaBuilder.upper(root.get("salesName")), "%"+salesName.toUpperCase(Locale.ROOT)+"%"));
     }
 
-    public static Specification<Sales> dealerIdContains(String dealerId){
+    public static Specification<ViewAllSales> dealerIdContains(String dealerId){
         return ((root, query, criteriaBuilder) ->
                 dealerId.isEmpty() ?
                         criteriaBuilder.conjunction() :
                         criteriaBuilder.like(criteriaBuilder.upper(root.get("dealer").get("dealerId")), "%"+dealerId.toUpperCase(Locale.ROOT)+"%"));
     }
 
-    public static Specification<Sales> statusIs(String status){
+    public static Specification<ViewAllSales> statusIs(String status){
         return ((root, query, criteriaBuilder) ->
                 status.isEmpty() ?
                         criteriaBuilder.conjunction() :
