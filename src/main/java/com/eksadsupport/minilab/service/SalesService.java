@@ -28,19 +28,7 @@ public class SalesService {
         sr.update(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
         return new GetSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
     }
-
-//    public List<Sales> listAll(String dealerId, String salesStatus, String salesName, int limit, int offset){
-//        return sr.listAll(dealerId, salesStatus, salesName, limit, offset);
-//    }
-
-    public Page<Sales> listAll(String dealerId, String salesStatus, String salesName, Pageable pageable){
-        return sr.listAll(dealerId, salesStatus, salesName, pageable);
-    }
-
-    public Page<Sales> listEverything(Pageable pageable){
-        return sr.listEverything(pageable);
-    }
-
+    
     public Page<Sales> listBy(String dealerId, String salesStatus, String salesName, Pageable pageable){
         Specification spec1 = SalesSpecs.dealerIdContains(dealerId);
         Specification spec2 = SalesSpecs.salesNameContains(salesName);
