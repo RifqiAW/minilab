@@ -14,15 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -79,16 +74,19 @@ public class SalesController {
 
     @PostMapping("/listAll")
     public ResponseEntity<Object> listAll(@RequestBody Map<String, Object> inputPayload){
+        Util util = new Util();
         try{
-            String salesName = inputPayload.get("salesName").toString();
-            String dealerId = inputPayload.get("dealerId").toString();
-            String salesStatus = inputPayload.get("salesStatus").toString();
+            String salesName = util.valueToStringOrEmpty(inputPayload, "salesName");
+            String dealerId = util.valueToStringOrEmpty(inputPayload, "dealerId");
+            String salesStatus = util.valueToStringOrEmpty(inputPayload, "salesStatus");
             int offset = Integer.parseInt(inputPayload.get("offset").toString());
             int limit = Integer.parseInt(inputPayload.get("limit").toString());
 
-            Pageable paging = PageRequest.of(offset, limit);
+            if(salesName.isEmpty() && dealerId.isEmpty() && salesStatus.isEmpty()){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
 
-//            Page<Sales> page = ss.listAll(dealerId, salesStatus, salesName, paging);
+            Pageable paging = PageRequest.of(offset, limit);
 
             Page<Sales> pages = ss.listBy(dealerId, salesStatus, salesName, paging);
 
