@@ -17,7 +17,7 @@ public class ViewSalesSpecs {
         return ((root, query, criteriaBuilder) ->
                 dealerId.isEmpty() ?
                         criteriaBuilder.conjunction() :
-                        criteriaBuilder.like(criteriaBuilder.upper(root.get("dealer").get("dealerId")), "%"+dealerId.toUpperCase(Locale.ROOT)+"%"));
+                        criteriaBuilder.like(criteriaBuilder.upper(root.get("dealerCode")), "%"+dealerId.toUpperCase(Locale.ROOT)+"%"));
     }
 
     public static Specification<ViewAllSales> statusIs(String status){

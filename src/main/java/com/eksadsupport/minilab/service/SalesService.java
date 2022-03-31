@@ -1,6 +1,7 @@
 package com.eksadsupport.minilab.service;
 
 import com.eksadsupport.minilab.domain.Sales;
+import com.eksadsupport.minilab.domain.ViewAllSales;
 import com.eksadsupport.minilab.dto.sales.GetSales;
 import com.eksadsupport.minilab.model.SalesSpecs;
 import com.eksadsupport.minilab.model.ViewSalesSpecs;
@@ -32,7 +33,7 @@ public class SalesService {
                     sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
         }catch (Exception e){
             return new GetSales(sale.getSalesId(), sale.getSalesName(),
-                    sale.getDealer().getDealerId(), null,
+                    sale.getDealer().getDealerId(), "",
                     sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
         }
     }
@@ -47,7 +48,7 @@ public class SalesService {
                     sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
         }catch (Exception e){
             return new GetSales(sale.getSalesId(), sale.getSalesName(),
-                    sale.getDealer().getDealerId(), null,
+                    sale.getDealer().getDealerId(), "",
                     sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
         }
     }
@@ -60,12 +61,12 @@ public class SalesService {
         return sr.findAll(spec, pageable);
     }
 
-    public Page<Sales> listViewBy(String dealerId, String salesStatus, String salesName, Pageable pageable){
+    public Page<ViewAllSales> listViewBy(String dealerId, String salesStatus, String salesName, Pageable pageable){
         Specification spec1 = ViewSalesSpecs.dealerIdContains(dealerId);
         Specification spec2 = ViewSalesSpecs.salesNameContains(salesName);
         Specification spec3 = ViewSalesSpecs.statusIs(salesStatus);
         Specification spec = Specification.where(spec1).and(spec2).and(spec3);
-        return sr.findAll(spec, pageable);
+        return vsr.findAll(spec, pageable);
     }
 
     public GetSales get(String salesId){
@@ -76,7 +77,7 @@ public class SalesService {
                     sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
         }catch (Exception e){
             return new GetSales(sale.getSalesId(), sale.getSalesName(),
-                    sale.getDealer().getDealerId(), null,
+                    sale.getDealer().getDealerId(), "",
                     sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
         }
     }

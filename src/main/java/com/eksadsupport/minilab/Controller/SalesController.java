@@ -2,6 +2,7 @@ package com.eksadsupport.minilab.Controller;
 
 import com.eksadsupport.minilab.Common.Constants;
 import com.eksadsupport.minilab.domain.Sales;
+import com.eksadsupport.minilab.domain.ViewAllSales;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
@@ -39,15 +40,15 @@ public class SalesController {
             String salesEmail = valueToStringOrEmpty(inputPayload, "salesEmail");
             String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus");
 
-            if(!checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
-                || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
-                || checkStringIfNulllOrEmpty(salesStatus))){
-                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-            }
+//            if(!checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
+//                || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
+//                || checkStringIfNulllOrEmpty(salesStatus))){
+//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+//            }
 
             if(checkStringIfNulllOrEmpty(salesId)){
                 if(supervisorId.isEmpty()){
-                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, null, salesGender, salesEmail, salesStatus);
+                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
 
                     return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
                 }else{
@@ -79,66 +80,13 @@ public class SalesController {
             }
 
             if(supervisorId.isEmpty()){
-                GetSales sales = ss.updateSales(salesId, salesName, dealerId, null, salesGender, salesEmail, salesStatus);
+                GetSales sales = ss.updateSales(salesId, salesName, dealerId, "", salesGender, salesEmail, salesStatus);
 
                 return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }else{
                 GetSales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
                 return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }
-
-//            Map<String, Object> args = new HashMap<>();
-//
-//            for(String s: Constants.SALES_ARGS){
-//                args.put(s, valueToStringOrEmpty(inputPayload, s));
-//            }
-//            if(!checkStringIfNulllOrEmpty(args.get("salesId").toString()) && (!checkStringIfAlphabets(args.get("salesName").toString()) || !checkIfValidEmail(args.get("salesEmail").toString()) || checkStringIfNulllOrEmpty(args.get("salesName").toString())
-//                    || checkStringIfNulllOrEmpty(args.get("dealerId").toString()) || checkStringIfNulllOrEmpty(args.get("salesGender").toString()) || checkStringIfNulllOrEmpty(args.get("salesEmail").toString())
-//                    || checkStringIfNulllOrEmpty(args.get("salesStatus").toString()))){
-//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-//            }
-//
-//            if(checkStringIfNulllOrEmpty(salesId)){
-//                if(supervisorId.isEmpty()){
-//                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, null, salesGender, salesEmail, salesStatus);
-//
-//                    return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
-//                }else{
-//                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
-//                    return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
-//                }
-//            }
-//
-//            Optional<Sales> opt = ss.findBySalesId(salesId);
-//
-//            if(!opt.isPresent()){
-//                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
-//            }else{
-//                if(salesName.isEmpty()){
-//                    salesName = opt.get().getSalesName();
-//                }
-//                if(dealerId.isEmpty()){
-//                    dealerId = opt.get().getDealer().getDealerId();
-//                }
-//                if(salesGender.isEmpty()){
-//                    salesGender = opt.get().getSalesGender();
-//                }
-//                if(salesEmail.isEmpty()){
-//                    salesEmail = opt.get().getSalesEmail();
-//                }
-//                if(salesStatus.isEmpty()){
-//                    salesStatus = opt.get().getSalesStatus();
-//                }
-//            }
-//
-//            if(supervisorId.isEmpty()){
-//                GetSales sales = ss.updateSales(salesId, salesName, dealerId, null, salesGender, salesEmail, salesStatus);
-//
-//                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
-//            }else{
-//                GetSales sales = ss.updateSales(salesId, salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
-//                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
-//            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -174,27 +122,42 @@ public class SalesController {
 
             Pageable paging = PageRequest.of(offset, limit);
 
-            Page<Sales> pages = ss.listViewBy(dealerId, salesStatus, salesName, paging);
+            Page<ViewAllSales> pages = ss.listViewBy(dealerId, salesStatus, salesName, paging);
 
-            List<Sales> sales = pages.getContent();
+            List<ViewAllSales> sales = pages.getContent();
 
             List<GetSales> getSalesList = new ArrayList<>();
 
-            for(Sales sale:sales){
+//            for(Sales sale:sales){
+//                try{
+//                    GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
+//                            sale.getDealer().getDealerId(), sale.getSupervisor().getSalesId(),
+//                            sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
+//
+//                    getSalesList.add(getSales);
+//                }catch (Exception e){
+//                    GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
+//                            sale.getDealer().getDealerId(), null,
+//                            sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
+//
+//                    getSalesList.add(getSales);
+//                }
+//            }
+
+            for(ViewAllSales sale:sales){
                 try{
                     GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
-                            sale.getDealer().getDealerId(), sale.getSupervisor().getSalesId(),
+                            sale.getDealerCode(), sale.getSupervisorId(),
                             sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
 
                     getSalesList.add(getSales);
                 }catch (Exception e){
                     GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
-                            sale.getDealer().getDealerId(), null,
+                            sale.getDealerCode(), "",
                             sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
 
                     getSalesList.add(getSales);
                 }
-
             }
 
             GetListSales getListSales = new GetListSales();
@@ -217,8 +180,31 @@ public class SalesController {
                 return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }
 
-            GetSales sales = ss.get(salesId);
-            return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+            try {
+                GetSales sales = new GetSales(
+                        opt.get().getSalesId(),
+                        opt.get().getSalesName(),
+                        opt.get().getDealer().getDealerId(),
+                        opt.get().getSupervisor().getSalesId(),
+                        opt.get().getSalesGender(),
+                        opt.get().getSalesEmail(),
+                        opt.get().getSalesStatus()
+                );
+                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+            }catch (Exception e){
+                GetSales sales = new GetSales(
+                        opt.get().getSalesId(),
+                        opt.get().getSalesName(),
+                        opt.get().getDealer().getDealerId(),
+                        "",
+                        opt.get().getSalesGender(),
+                        opt.get().getSalesEmail(),
+                        opt.get().getSalesStatus()
+                );
+                return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
+            }
+
+
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);

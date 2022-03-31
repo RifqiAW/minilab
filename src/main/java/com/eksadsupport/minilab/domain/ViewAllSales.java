@@ -9,28 +9,18 @@ import javax.persistence.Table;
 
 @Entity
 @Immutable
-@Table(name = "`vw_mst_sales`")
-@Subselect("select uuid() as id, ms.* from mst_sales ms")
+@Table(name = "vw_mst_sales")
+//@Subselect("select uuid() as id, ms.* from vw_mst_sales ms")
 public class ViewAllSales {
 
     @Id
-    private long id;
-
     private String salesId;
     private String salesName;
-    private String dealer;
-    private String supervisor;
+    private String dealerCode;
+    private String supervisorId;
     private String salesEmail;
     private String salesStatus;
     private String salesGender;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getSalesId() {
         return salesId;
@@ -48,20 +38,20 @@ public class ViewAllSales {
         this.salesName = salesName;
     }
 
-    public String getDealer() {
-        return dealer;
+    public String getDealerCode() {
+        return dealerCode;
     }
 
-    public void setDealer(String dealer) {
-        this.dealer = dealer;
+    public void setDealerCode(String dealerCode) {
+        this.dealerCode = dealerCode;
     }
 
-    public String getSupervisor() {
-        return supervisor;
+    public String getSupervisorId() {
+        return supervisorId;
     }
 
-    public void setSupervisor(String supervisor) {
-        this.supervisor = supervisor;
+    public void setSupervisorId(String supervisorId) {
+        this.supervisorId = supervisorId;
     }
 
     public String getSalesEmail() {

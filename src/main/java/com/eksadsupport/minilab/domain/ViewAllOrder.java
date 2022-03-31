@@ -1,43 +1,36 @@
-package com.eksadsupport.minilab.dto.order;
+package com.eksadsupport.minilab.domain;
 
-public class GetOrder {
+import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.Subselect;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Immutable
+@Table(name = "vw_trx_order")
+//@Subselect("select uuid() as id, ms.* from vw_trx_order ms")
+public class ViewAllOrder {
+
+    @Id
     private String orderId;
-    private String unitCode;
+    private String unitId;
     private String dealerCode;
     private String salesId;
     private String customerId;
-    private int minimumPayment;
-    private int totalValue;
-    private int orderValue;
-    private int offtheroadValue;
-    private int orderDiscount;
-    private int ppn;
+    private double minimumPayment;
+    private double totalValue;
+    private double orderValue;
+    private double offtheroadValue;
+    private double orderTotalDiscount;
+    private double ppn;
     private String platNomor;
     private String nomorMesin;
     private String nomorRangka;
     private String isLeasing;
     private String paymentStatus;
     private String unitStatus;
-
-    public GetOrder(String orderId, String unitCode, String dealerCode, String salesId, String customerId, double minimumPayment, double totalValue, double orderValue, double offtheroadValue, double orderDiscount, double ppn, String platNomor, String nomorMesin, String nomorRangka, String isLeasing, String paymentStatus, String unitStatus) {
-        this.orderId = orderId;
-        this.unitCode = unitCode;
-        this.dealerCode = dealerCode;
-        this.salesId = salesId;
-        this.customerId = customerId;
-        this.minimumPayment = (int)Math.ceil(minimumPayment);
-        this.totalValue = (int)Math.ceil(totalValue);
-        this.orderValue = (int)Math.ceil(orderValue);
-        this.offtheroadValue = (int)Math.ceil(offtheroadValue);
-        this.orderDiscount = (int)Math.ceil(orderDiscount);
-        this.ppn = (int)Math.ceil(ppn);
-        this.platNomor = platNomor;
-        this.nomorMesin = nomorMesin;
-        this.nomorRangka = nomorRangka;
-        this.isLeasing = isLeasing;
-        this.paymentStatus = paymentStatus;
-        this.unitStatus = unitStatus;
-    }
 
     public String getOrderId() {
         return orderId;
@@ -47,12 +40,12 @@ public class GetOrder {
         this.orderId = orderId;
     }
 
-    public String getUnitCode() {
-        return unitCode;
+    public String getUnitId() {
+        return unitId;
     }
 
-    public void setUnitCode(String unitCode) {
-        this.unitCode = unitCode;
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
     }
 
     public String getDealerCode() {
@@ -79,51 +72,51 @@ public class GetOrder {
         this.customerId = customerId;
     }
 
-    public int getMinimumPayment() {
+    public double getMinimumPayment() {
         return minimumPayment;
     }
 
-    public void setMinimumPayment(int minimumPayment) {
+    public void setMinimumPayment(double minimumPayment) {
         this.minimumPayment = minimumPayment;
     }
 
-    public int getTotalValue() {
+    public double getTotalValue() {
         return totalValue;
     }
 
-    public void setTotalValue(int totalValue) {
+    public void setTotalValue(double totalValue) {
         this.totalValue = totalValue;
     }
 
-    public int getOrderValue() {
+    public double getOrderValue() {
         return orderValue;
     }
 
-    public void setOrderValue(int orderValue) {
+    public void setOrderValue(double orderValue) {
         this.orderValue = orderValue;
     }
 
-    public int getOfftheroadValue() {
+    public double getOfftheroadValue() {
         return offtheroadValue;
     }
 
-    public void setOfftheroadValue(int offtheroadValue) {
+    public void setOfftheroadValue(double offtheroadValue) {
         this.offtheroadValue = offtheroadValue;
     }
 
-    public int getOrderDiscount() {
-        return orderDiscount;
+    public double getOrderTotalDiscount() {
+        return orderTotalDiscount;
     }
 
-    public void setOrderDiscount(int orderDiscount) {
-        this.orderDiscount = orderDiscount;
+    public void setOrderTotalDiscount(double orderTotalDiscount) {
+        this.orderTotalDiscount = orderTotalDiscount;
     }
 
-    public int getPpn() {
+    public double getPpn() {
         return ppn;
     }
 
-    public void setPpn(int ppn) {
+    public void setPpn(double ppn) {
         this.ppn = ppn;
     }
 
