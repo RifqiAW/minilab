@@ -1,6 +1,6 @@
 package com.eksadsupport.minilab.domain;
 
-import jdk.nashorn.internal.ir.annotations.Immutable;
+import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 
 import javax.persistence.Entity;
