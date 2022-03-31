@@ -8,13 +8,9 @@ import java.util.List;
 public class DealerListAll {
 
     String status;
-
     String code;
-
     String message;
-
-    List data;
-
+    Object data;
     int dataOfRecord;
 
     public String getStatus() {
@@ -41,11 +37,11 @@ public class DealerListAll {
         this.message = message;
     }
 
-    public List<Dealer> getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(List<Dealer> data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
