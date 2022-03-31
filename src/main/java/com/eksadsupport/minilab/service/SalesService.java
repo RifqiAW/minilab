@@ -2,10 +2,12 @@ package com.eksadsupport.minilab.service;
 
 import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.dto.sales.GetSales;
+import com.eksadsupport.minilab.model.SalesSpecs;
 import com.eksadsupport.minilab.repository.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +39,14 @@ public class SalesService {
 
     public Page<Sales> listEverything(Pageable pageable){
         return sr.listEverything(pageable);
+    }
+
+    public Page<Sales> listBy(String dealerId, String salesStatus, String salesName, Pageable pageable){
+        Specification spec1 = SalesSpecs.dealerIdContains(dealerId);
+        Specification spec2 = SalesSpecs.salesNameContains(salesName);
+        Specification spec3 = SalesSpecs.statusIs(salesStatus);
+        Specification spec = Specification.where(spec1).and(spec2).and(spec3);
+        return sr.findAll(spec, pageable);
     }
 
     public GetSales get(String salesId){

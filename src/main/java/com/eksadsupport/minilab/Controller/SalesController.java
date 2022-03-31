@@ -8,15 +8,21 @@ import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
 import com.eksadsupport.minilab.dto.sales.GetListSales;
 import com.eksadsupport.minilab.dto.sales.GetSales;
+import com.eksadsupport.minilab.model.SalesSpecs;
 import com.eksadsupport.minilab.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -82,12 +88,12 @@ public class SalesController {
 
             Pageable paging = PageRequest.of(offset, limit);
 
-//            List<Sales> sales = ss.listAll(dealerId, salesStatus, salesName, limit, offset);
+//            Page<Sales> page = ss.listAll(dealerId, salesStatus, salesName, paging);
 
-            Page<Sales> page = ss.listAll(dealerId, salesStatus, salesName, paging);
+            Page<Sales> pages = ss.listBy(dealerId, salesStatus, salesName, paging);
 
             List<Sales> sales = new ArrayList<Sales>();
-            sales = page.getContent();
+            sales = pages.getContent();
 
             List<GetSales> getSalesList = new ArrayList<>();
 
