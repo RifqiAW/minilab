@@ -17,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.eksadsupport.minilab.Common.Util.*;
 
@@ -115,6 +112,19 @@ public class SalesController {
 
                 getSalesList.add(getSales);
             }
+
+
+//            ArrayList<ViewAllSales> arr = new ArrayList<ViewAllSales>(sales.size());
+//            for(int i=0; i < sales.size(); i++){
+//                ViewAllSales sale = sales.get(i);
+//                new ViewAllSales(sale.getId(), sale.getSalesId(), sale.getSalesName(), "222", "aaa", "bbb", "ccc", "ddd")
+//                System.out.println(sale);
+//                GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
+//                        sale.getDealer(), sale.getSupervisor(),
+//                        sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
+//
+//                getSalesList.add(getSales);
+//            }
 
 //            for(ViewAllSales sale:sales){
 //                System.out.println(sale.getSalesId());
