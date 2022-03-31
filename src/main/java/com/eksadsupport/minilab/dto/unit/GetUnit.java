@@ -1,46 +1,24 @@
-package com.eksadsupport.minilab.domain;
+package com.eksadsupport.minilab.dto.unit;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Size;
+public class GetUnit {
 
-@Entity
-@Table(name = "mst_unit")
-public class Unit {
-
-    @Id
-    @Size (max = 50)
     private String unitId;
-
-    @Size (max = 255)
-    @Column(name = "unit_series_name")
     private String unitSeriesName;
-
-    @Size (max = 50)
-    @Column(name = "dealer_id")
     private String dealerId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="dealer_id")
-//    @JsonIgnore
-//    private Dealer dealer;
-
-    @Size (max = 4)
-    @Column(name = "unit_quantity")
     private int unitQuantity;
-
-    @Size (max = 512)
-    @Column(name = "unit_color")
     private String unitColor;
-
-    @Size (max = 10)
-    @Column(name = "unit_status")
     private String unitStatus;
+    private float averageCost;
 
-    @Column(name = "average_cost")
-    private double averageCost;
+    public GetUnit(String unitId, String unitSeriesName, String dealerId, int unitQuantity, String unitColor, String unitStatus, double averageCost) {
+        this.unitId = unitId;
+        this.unitSeriesName = unitSeriesName;
+        this.dealerId = dealerId;
+        this.unitQuantity = unitQuantity;
+        this.unitColor = unitColor;
+        this.unitStatus = unitStatus;
+        this.averageCost = (float) averageCost;
+    }
 
     public String getUnitId() {
         return unitId;
@@ -90,21 +68,11 @@ public class Unit {
         this.unitStatus = unitStatus;
     }
 
-    public double getAverageCost() {
+    public float getAverageCost() {
         return averageCost;
     }
 
-    public void setAverageCost(double averageCost) {
+    public void setAverageCost(float averageCost) {
         this.averageCost = averageCost;
     }
-
-    //    public Dealer getDealer() {
-//        return dealer;
-//    }
-//
-//    public void setDealer(Dealer dealer) {
-//        this.dealer = dealer;
-//    }
-
 }
-
