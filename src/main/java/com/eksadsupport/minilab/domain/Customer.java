@@ -1,13 +1,16 @@
 package com.eksadsupport.minilab.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "mst_customer")
 
 public class Customer {
+
     @Id
     @Size(min = 0,max = 50)
     @Column(name = "customer_id",nullable = false)
@@ -17,10 +20,10 @@ public class Customer {
     @Column(name = "customer_name",nullable = false)
     private String customerName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @Size(min = 0,max = 50)
     @JoinColumn(name = "dealer_code",nullable = false)
-    private Dealer dealerId;
+    private Dealer dealer;
 
     @Size(min = 0,max = 4)
     @Column(name = "customer_gender")
@@ -45,16 +48,16 @@ public class Customer {
 
     @Size(min = 0,max = 50)
     @Column(name = "customer_telp_number")
-    private String customerTelpNumber;
+    private String customerTelp;
 
     @Size(min = 0,max = 50)
     @Column(name = "customer_hp_number")
-    private String customerHpNumber;
+    private String customerHp;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @Size(min = 0,max = 50)
     @JoinColumn(name = "sales_id",nullable = false)
-    private Sales salesId;
+    private Sales sales;
 
     @Size(min = 0,max = 10)
     @Column(name = "customer_status",nullable = false)
@@ -76,12 +79,12 @@ public class Customer {
         this.customerName = customerName;
     }
 
-    public Dealer getDealerId() {
-        return dealerId;
+    public Dealer getDealer() {
+        return dealer;
     }
 
-    public void setDealerId(Dealer dealerId) {
-        this.dealerId = dealerId;
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
     }
 
     public String getCustomerGender() {
@@ -124,28 +127,28 @@ public class Customer {
         this.customerAddress = customerAddress;
     }
 
-    public String getCustomerTelpNumber() {
-        return customerTelpNumber;
+    public String getCustomerTelp() {
+        return customerTelp;
     }
 
-    public void setCustomerTelpNumber(String customerTelpNumber) {
-        this.customerTelpNumber = customerTelpNumber;
+    public void setCustomerTelp(String customerTelp) {
+        this.customerTelp = customerTelp;
     }
 
-    public String getCustomerHpNumber() {
-        return customerHpNumber;
+    public String getCustomerHp() {
+        return customerHp;
     }
 
-    public void setCustomerHpNumber(String customerHpNumber) {
-        this.customerHpNumber = customerHpNumber;
+    public void setCustomerHp(String customerHp) {
+        this.customerHp = customerHp;
     }
 
-    public Sales getSalesId() {
-        return salesId;
+    public Sales getSales() {
+        return sales;
     }
 
-    public void setSalesId(Sales salesId) {
-        this.salesId = salesId;
+    public void setSales(Sales sales) {
+        this.sales = sales;
     }
 
     public String getCustomerStatus() {
