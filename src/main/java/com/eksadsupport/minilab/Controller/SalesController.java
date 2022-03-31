@@ -1,15 +1,11 @@
 package com.eksadsupport.minilab.Controller;
 
-import com.eksadsupport.minilab.Common.Constants;
-import com.eksadsupport.minilab.Common.Util;
 import com.eksadsupport.minilab.domain.Sales;
-import com.eksadsupport.minilab.dto.response.Response;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
 import com.eksadsupport.minilab.dto.sales.GetListSales;
 import com.eksadsupport.minilab.dto.sales.GetSales;
-import com.eksadsupport.minilab.model.SalesSpecs;
 import com.eksadsupport.minilab.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,8 +100,7 @@ public class SalesController {
 
             Page<Sales> pages = ss.listBy(dealerId, salesStatus, salesName, paging);
 
-            List<Sales> sales = new ArrayList<Sales>();
-            sales = pages.getContent();
+            List<Sales> sales = pages.getContent();
 
             List<GetSales> getSalesList = new ArrayList<>();
 

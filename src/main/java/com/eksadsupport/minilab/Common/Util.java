@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Map;
@@ -40,18 +41,21 @@ public class Util {
     }
 
     public static String generateId(){
-        return new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(new Date());
+        return LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSS"));
+
+//        return new SimpleDateFormat("yyyyMMddHHmmssSSSSS").format(new Date());
     }
 
     public static boolean isValidId(String dateStr) {
-        DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-        sdf.setLenient(false);
+//        DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSSS");
+//        sdf.setLenient(false);
         try {
-//            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSS");
-//            dateFormatter.parse(dateStr);
-            sdf.parse(dateStr);
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSS");
+            dateFormatter.parse(dateStr);
+//            sdf.parse(dateStr);
         }
-        catch (ParseException e) {
+        catch (DateTimeParseException e) {
             return false;
         }
         return true;
