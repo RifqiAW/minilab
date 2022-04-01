@@ -1,6 +1,5 @@
 package com.eksadsupport.minilab.Controller;
 
-import com.eksadsupport.minilab.Common.Constants;
 import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.domain.ViewAllSales;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
@@ -40,15 +39,15 @@ public class SalesController {
             String salesEmail = valueToStringOrEmpty(inputPayload, "salesEmail");
             String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus");
 
-//            if(!checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
-//                || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
-//                || checkStringIfNulllOrEmpty(salesStatus))){
-//                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-//            }
+            if(checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
+                || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
+                || checkStringIfNulllOrEmpty(salesStatus))){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
 
             if(checkStringIfNulllOrEmpty(salesId)){
                 if(supervisorId.isEmpty()){
-                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, supervisorId, salesGender, salesEmail, salesStatus);
+                    GetSales sales = ss.saveSales(generateId(), salesName, dealerId, null, salesGender, salesEmail, salesStatus);
 
                     return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
                 }else{
@@ -71,6 +70,13 @@ public class SalesController {
                 if(salesGender.isEmpty()){
                     salesGender = opt.get().getSalesGender();
                 }
+                try {
+                    if(supervisorId.isEmpty()){
+                        supervisorId = opt.get().getSupervisor().getSalesId();
+                    }
+                }catch (Exception e){
+                    supervisorId = null;
+                }
                 if(salesEmail.isEmpty()){
                     salesEmail = opt.get().getSalesEmail();
                 }
@@ -79,8 +85,12 @@ public class SalesController {
                 }
             }
 
-            if(supervisorId.isEmpty()){
-                GetSales sales = ss.updateSales(salesId, salesName, dealerId, "", salesGender, salesEmail, salesStatus);
+            if(!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail)){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
+
+            if(checkStringIfNulllOrEmpty(supervisorId)){
+                GetSales sales = ss.updateSales(salesId, salesName, dealerId, null, salesGender, salesEmail, salesStatus);
 
                 return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }else{
@@ -127,22 +137,6 @@ public class SalesController {
             List<ViewAllSales> sales = pages.getContent();
 
             List<GetSales> getSalesList = new ArrayList<>();
-
-//            for(Sales sale:sales){
-//                try{
-//                    GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
-//                            sale.getDealer().getDealerId(), sale.getSupervisor().getSalesId(),
-//                            sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
-//
-//                    getSalesList.add(getSales);
-//                }catch (Exception e){
-//                    GetSales getSales = new GetSales(sale.getSalesId(), sale.getSalesName(),
-//                            sale.getDealer().getDealerId(), null,
-//                            sale.getSalesGender(), sale.getSalesEmail(), sale.getSalesStatus());
-//
-//                    getSalesList.add(getSales);
-//                }
-//            }
 
             for(ViewAllSales sale:sales){
                 try{

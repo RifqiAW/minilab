@@ -65,7 +65,7 @@ public class SalesService {
         Specification spec1 = ViewSalesSpecs.dealerIdContains(dealerId);
         Specification spec2 = ViewSalesSpecs.salesNameContains(salesName);
         Specification spec3 = ViewSalesSpecs.statusIs(salesStatus);
-        Specification spec = Specification.where(spec1).and(spec2).and(spec3);
+        Specification spec = Specification.where(spec1).or(spec2).or(spec3);
         return vsr.findAll(spec, pageable);
     }
 

@@ -15,7 +15,7 @@ import java.util.Map;
 public class Util {
 
     public static boolean checkStringIfNulllOrEmpty(String s){
-        if(s.isEmpty() || s == null){
+        if(s == null || s.isEmpty()){
             return true;
         }
         return false;

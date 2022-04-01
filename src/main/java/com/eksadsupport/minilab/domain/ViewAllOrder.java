@@ -1,7 +1,6 @@
 package com.eksadsupport.minilab.domain;
 
 import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.Subselect;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,7 +9,6 @@ import javax.persistence.Table;
 @Entity
 @Immutable
 @Table(name = "vw_trx_order")
-//@Subselect("select uuid() as id, ms.* from vw_trx_order ms")
 public class ViewAllOrder {
 
     @Id

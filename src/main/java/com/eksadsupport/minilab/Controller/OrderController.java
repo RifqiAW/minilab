@@ -1,18 +1,13 @@
 package com.eksadsupport.minilab.Controller;
 
-import com.eksadsupport.minilab.Common.Constants;
 import com.eksadsupport.minilab.domain.Order;
-import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.domain.ViewAllOrder;
 import com.eksadsupport.minilab.dto.order.GetListOrder;
 import com.eksadsupport.minilab.dto.order.GetOrder;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
-import com.eksadsupport.minilab.dto.sales.GetListSales;
-import com.eksadsupport.minilab.dto.sales.GetSales;
 import com.eksadsupport.minilab.service.OrderService;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -55,26 +50,61 @@ public class OrderController {
             String paymentStatus = valueToStringOrEmpty(inputPayload, "paymentStatus");
             String unitStatus = valueToStringOrEmpty(inputPayload, "unitStatus");
 
+            if(orderId.isEmpty() && (unitCode.isEmpty() || dealerCode.isEmpty() || salesId.isEmpty() ||
+                    customerId.isEmpty() || minimumPayment.isEmpty() || totalValue.isEmpty() || orderValue.isEmpty() ||
+                    offtheroadValue.isEmpty() || orderDiscount.isEmpty() || ppn.isEmpty() || paymentStatus.isEmpty() ||
+                    unitStatus.isEmpty() || Integer.parseInt(ppn) < 0 ||
+                    Integer.parseInt(totalValue) != Integer.parseInt(orderValue) - Integer.parseInt(orderDiscount) ||
+                    (isLeasing.equalsIgnoreCase("NO") && !paymentStatus.equalsIgnoreCase("FULLY_PAID")) ||
+                    (isLeasing.equalsIgnoreCase("YES") && !paymentStatus.equalsIgnoreCase("PARTIAL_PAID"))
+                    )){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
+
             if(checkStringIfNulllOrEmpty(orderId)){
-                GetOrder getOrder = os.saveOrder(generateId(),
-                        unitCode,
-                        dealerCode,
-                        salesId,
-                        customerId,
-                        Double.parseDouble(minimumPayment),
-                        Double.parseDouble(totalValue),
-                        Double.parseDouble(orderValue),
-                        Double.parseDouble(offtheroadValue),
-                        Double.parseDouble(orderDiscount),
-                        Double.parseDouble(ppn),
-                        platNomor,
-                        nomorMesin,
-                        nomorRangka,
-                        isLeasing,
-                        paymentStatus,
-                        unitStatus
-                );
-                return new ResponseEntity<>(new ResponseSuccess(getOrder), HttpStatus.OK);
+                if(isLeasing.isEmpty()){
+                    GetOrder getOrder =
+                            os.saveOrder(generateId(),
+                            unitCode,
+                            dealerCode,
+                            salesId,
+                            customerId,
+                            Double.parseDouble(minimumPayment),
+                            Double.parseDouble(totalValue),
+                            Double.parseDouble(orderValue),
+                            Double.parseDouble(offtheroadValue),
+                            Double.parseDouble(orderDiscount),
+                            Double.parseDouble(ppn),
+                            platNomor,
+                            nomorMesin,
+                            nomorRangka,
+                            null,
+                            paymentStatus,
+                            unitStatus
+                    );
+                    return new ResponseEntity<>(new ResponseSuccess(getOrder), HttpStatus.OK);
+                }
+                else{
+                    GetOrder getOrder = os.saveOrder(generateId(),
+                            unitCode,
+                            dealerCode,
+                            salesId,
+                            customerId,
+                            Double.parseDouble(minimumPayment),
+                            Double.parseDouble(totalValue),
+                            Double.parseDouble(orderValue),
+                            Double.parseDouble(offtheroadValue),
+                            Double.parseDouble(orderDiscount),
+                            Double.parseDouble(ppn),
+                            platNomor,
+                            nomorMesin,
+                            nomorRangka,
+                            isLeasing,
+                            paymentStatus,
+                            unitStatus
+                    );
+                    return new ResponseEntity<>(new ResponseSuccess(getOrder), HttpStatus.OK);
+                }
             }
 
             Optional<Order> opt = os.findByOrderId(orderId);
@@ -82,9 +112,6 @@ public class OrderController {
             if(!opt.isPresent()){
                 return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }else{
-                if(orderId.isEmpty()){
-                    orderId = opt.get().getOrderId();
-                }
                 if(unitCode.isEmpty()){
                     unitCode = opt.get().getUnit().getUnitId();
                 }
@@ -132,26 +159,58 @@ public class OrderController {
                 }
             }
 
-            GetOrder getOrder = os.updateOrder(
-                    orderId,
-                    unitCode,
-                    dealerCode,
-                    salesId,
-                    customerId,
-                    Double.parseDouble(minimumPayment),
-                    Double.parseDouble(totalValue),
-                    Double.parseDouble(orderValue),
-                    Double.parseDouble(offtheroadValue),
-                    Double.parseDouble(orderDiscount),
-                    Double.parseDouble(ppn),
-                    platNomor,
-                    nomorMesin,
-                    nomorRangka,
-                    isLeasing,
-                    paymentStatus,
-                    unitStatus
-            );
-            return new ResponseEntity<>(new ResponseSuccess(getOrder), HttpStatus.OK);
+            if (Integer.parseInt(ppn) < 0 ||
+                    Integer.parseInt(totalValue) != Integer.parseInt(orderValue) - Integer.parseInt(orderDiscount) ||
+                    (isLeasing.equalsIgnoreCase("NO") && !paymentStatus.equalsIgnoreCase("FULLY_PAID")) ||
+                    (isLeasing.equalsIgnoreCase("YES") && !paymentStatus.equalsIgnoreCase("PARTIAL_PAID"))
+            ){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
+
+            if(isLeasing.isEmpty()){
+                GetOrder getOrder = os.updateOrder(
+                        orderId,
+                        unitCode,
+                        dealerCode,
+                        salesId,
+                        customerId,
+                        Double.parseDouble(minimumPayment),
+                        Double.parseDouble(totalValue),
+                        Double.parseDouble(orderValue),
+                        Double.parseDouble(offtheroadValue),
+                        Double.parseDouble(orderDiscount),
+                        Double.parseDouble(ppn),
+                        platNomor,
+                        nomorMesin,
+                        nomorRangka,
+                        null,
+                        paymentStatus,
+                        unitStatus
+                );
+                return new ResponseEntity<>(new ResponseSuccess(getOrder), HttpStatus.OK);
+            }
+            else{
+                GetOrder getOrder = os.updateOrder(
+                        orderId,
+                        unitCode,
+                        dealerCode,
+                        salesId,
+                        customerId,
+                        Double.parseDouble(minimumPayment),
+                        Double.parseDouble(totalValue),
+                        Double.parseDouble(orderValue),
+                        Double.parseDouble(offtheroadValue),
+                        Double.parseDouble(orderDiscount),
+                        Double.parseDouble(ppn),
+                        platNomor,
+                        nomorMesin,
+                        nomorRangka,
+                        isLeasing,
+                        paymentStatus,
+                        unitStatus
+                );
+                return new ResponseEntity<>(new ResponseSuccess(getOrder), HttpStatus.OK);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -196,28 +255,51 @@ public class OrderController {
             List<GetOrder> getOrders = new ArrayList<>();
 
             for(ViewAllOrder order:orders){
-                GetOrder getOrder = new GetOrder(
-                        order.getOrderId(),
-                        order.getUnitId(),
-                        order.getDealerCode(),
-                        order.getSalesId(),
-                        order.getCustomerId(),
-                        order.getMinimumPayment(),
-                        order.getTotalValue(),
-                        order.getOrderValue(),
-                        order.getOfftheroadValue(),
-                        order.getOrderTotalDiscount(),
-                        order.getPpn(),
-                        order.getPlatNomor(),
-                        order.getNomorMesin(),
-                        order.getNomorRangka(),
-                        order.getIsLeasing(),
-                        order.getPaymentStatus(),
-                        order.getUnitStatus()
-                );
+                try {
+                    GetOrder getOrder = new GetOrder(
+                            order.getOrderId(),
+                            order.getUnitId(),
+                            order.getDealerCode(),
+                            order.getSalesId(),
+                            order.getCustomerId(),
+                            order.getMinimumPayment(),
+                            order.getTotalValue(),
+                            order.getOrderValue(),
+                            order.getOfftheroadValue(),
+                            order.getOrderTotalDiscount(),
+                            order.getPpn(),
+                            order.getPlatNomor(),
+                            order.getNomorMesin(),
+                            order.getNomorRangka(),
+                            order.getIsLeasing(),
+                            order.getPaymentStatus(),
+                            order.getUnitStatus()
+                    );
 
-                getOrders.add(getOrder);
+                    getOrders.add(getOrder);
+                }catch (Exception e){
+                    GetOrder getOrder = new GetOrder(
+                            order.getOrderId(),
+                            order.getUnitId(),
+                            order.getDealerCode(),
+                            order.getSalesId(),
+                            order.getCustomerId(),
+                            order.getMinimumPayment(),
+                            order.getTotalValue(),
+                            order.getOrderValue(),
+                            order.getOfftheroadValue(),
+                            order.getOrderTotalDiscount(),
+                            order.getPpn(),
+                            order.getPlatNomor(),
+                            order.getNomorMesin(),
+                            order.getNomorRangka(),
+                            "",
+                            order.getPaymentStatus(),
+                            order.getUnitStatus()
+                    );
 
+                    getOrders.add(getOrder);
+                }
             }
 
             GetListOrder getListOrder = new GetListOrder();
@@ -240,26 +322,49 @@ public class OrderController {
                 return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }
 
-            GetOrder order = new GetOrder(
-                    opt.get().getOrderId(),
-                    opt.get().getUnit().getUnitId(),
-                    opt.get().getDealer().getDealerId(),
-                    opt.get().getSales().getSalesId(),
-                    opt.get().getCustomer().getCustomerId(),
-                    opt.get().getMinimumPayment(),
-                    opt.get().getTotalValue(),
-                    opt.get().getOrderValue(),
-                    opt.get().getOfftheroadValue(),
-                    opt.get().getOrderTotalDiscount(),
-                    opt.get().getPpn(),
-                    opt.get().getPlatNomor(),
-                    opt.get().getNomorMesin(),
-                    opt.get().getNomorRangka(),
-                    opt.get().getIsLeasing(),
-                    opt.get().getPaymentStatus(),
-                    opt.get().getUnitStatus()
-            );
-            return new ResponseEntity<>(new ResponseSuccess(order), HttpStatus.OK);
+            try {
+                GetOrder order = new GetOrder(
+                        opt.get().getOrderId(),
+                        opt.get().getUnit().getUnitId(),
+                        opt.get().getDealer().getDealerId(),
+                        opt.get().getSales().getSalesId(),
+                        opt.get().getCustomer().getCustomerId(),
+                        opt.get().getMinimumPayment(),
+                        opt.get().getTotalValue(),
+                        opt.get().getOrderValue(),
+                        opt.get().getOfftheroadValue(),
+                        opt.get().getOrderTotalDiscount(),
+                        opt.get().getPpn(),
+                        opt.get().getPlatNomor(),
+                        opt.get().getNomorMesin(),
+                        opt.get().getNomorRangka(),
+                        opt.get().getIsLeasing(),
+                        opt.get().getPaymentStatus(),
+                        opt.get().getUnitStatus()
+                );
+                return new ResponseEntity<>(new ResponseSuccess(order), HttpStatus.OK);
+            }catch (Exception e){
+                GetOrder order = new GetOrder(
+                        opt.get().getOrderId(),
+                        opt.get().getUnit().getUnitId(),
+                        opt.get().getDealer().getDealerId(),
+                        opt.get().getSales().getSalesId(),
+                        opt.get().getCustomer().getCustomerId(),
+                        opt.get().getMinimumPayment(),
+                        opt.get().getTotalValue(),
+                        opt.get().getOrderValue(),
+                        opt.get().getOfftheroadValue(),
+                        opt.get().getOrderTotalDiscount(),
+                        opt.get().getPpn(),
+                        opt.get().getPlatNomor(),
+                        opt.get().getNomorMesin(),
+                        opt.get().getNomorRangka(),
+                        "",
+                        opt.get().getPaymentStatus(),
+                        opt.get().getUnitStatus()
+                );
+                return new ResponseEntity<>(new ResponseSuccess(order), HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
