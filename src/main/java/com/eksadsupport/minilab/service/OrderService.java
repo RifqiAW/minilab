@@ -122,7 +122,7 @@ public class OrderService {
         Specification spec3 = ViewOrderSpecs.nomorMesinContains(nomorMesin);
         Specification spec4 = ViewOrderSpecs.nomorRangkaContains(nomorRangka);
         Specification spec5 = ViewOrderSpecs.paymentStatusIs(paymentStatus);
-        Specification spec = Specification.where(spec1).and(spec2).and(spec3).or(spec4).or(spec5);
+        Specification spec = Specification.where(spec1).or(spec2).or(spec3).or(spec4).or(spec5);
         return vor.findAll(spec, paging);
     }
 

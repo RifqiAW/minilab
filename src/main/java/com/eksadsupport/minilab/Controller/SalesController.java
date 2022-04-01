@@ -35,9 +35,9 @@ public class SalesController {
             String salesName = valueToStringOrEmpty(inputPayload, "salesName");
             String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
             String supervisorId = valueToStringOrEmpty(inputPayload, "supervisorId");
-            String salesGender = valueToStringOrEmpty(inputPayload, "salesGender");
+            String salesGender = valueToStringOrEmpty(inputPayload, "salesGender").toUpperCase(Locale.ROOT);
             String salesEmail = valueToStringOrEmpty(inputPayload, "salesEmail");
-            String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus");
+            String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus").toUpperCase(Locale.ROOT);
 
             if(checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
                 || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)

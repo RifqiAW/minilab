@@ -46,9 +46,9 @@ public class OrderController {
             String platNomor = valueToStringOrEmpty(inputPayload, "platNomor");
             String nomorMesin = valueToStringOrEmpty(inputPayload, "nomorMesin");
             String nomorRangka = valueToStringOrEmpty(inputPayload, "nomorRangka");
-            String isLeasing = valueToStringOrEmpty(inputPayload, "isLeasing");
-            String paymentStatus = valueToStringOrEmpty(inputPayload, "paymentStatus");
-            String unitStatus = valueToStringOrEmpty(inputPayload, "unitStatus");
+            String isLeasing = valueToStringOrEmpty(inputPayload, "isLeasing").toUpperCase(Locale.ROOT);
+            String paymentStatus = valueToStringOrEmpty(inputPayload, "paymentStatus").toUpperCase(Locale.ROOT);
+            String unitStatus = valueToStringOrEmpty(inputPayload, "unitStatus").toUpperCase(Locale.ROOT);
 
             if(orderId.isEmpty() && (unitCode.isEmpty() || dealerCode.isEmpty() || salesId.isEmpty() ||
                     customerId.isEmpty() || minimumPayment.isEmpty() || totalValue.isEmpty() || orderValue.isEmpty() ||
