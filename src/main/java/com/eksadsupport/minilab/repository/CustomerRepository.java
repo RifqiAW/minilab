@@ -17,7 +17,7 @@ public interface CustomerRepository extends JpaRepository<Customer,String> {
             "customer_nik,customer_kk,customer_email,customer_address,customer_telp_number,customer_hp_number,customer_status,sales_id) VALUES " +
             "(:customerId,:customerName,:dealerId,:customerGender," +
             ":customerNik,:customerKk,:customerEmail,:customerAddress,:customerTelp,:customerHp,:customerStatus,:salesId) returning *",nativeQuery = true)
-    Customer addCustomer(String customerId,String customerName,String dealerId,String customerGender,
+    int addCustomer(String customerId,String customerName,String dealerId,String customerGender,
                          String customerNik,String customerKk,String customerEmail,String customerAddress,
                          String customerTelp,String customerHp, String customerStatus,String salesId);
 
@@ -27,7 +27,7 @@ public interface CustomerRepository extends JpaRepository<Customer,String> {
             "customer_nik=?4,customer_kk=?5,customer_email=?6,customer_address=?7," +
             "customer_telp_number=?8,customer_hp_number=?9,customer_status=?10,sales_id=?11 " +
             "WHERE customer_id=?12",nativeQuery = true)
-    Customer updateCustomer(String customerName,String dealerId,String customerGender,
+    int updateCustomer(String customerName,String dealerId,String customerGender,
                        String customerNik,String customerKk,String customerEmail,String customerAddress,
                        String customerTelp,String customerHp,String customerStatus,String salesId,
                        String customerId);
@@ -38,8 +38,11 @@ public interface CustomerRepository extends JpaRepository<Customer,String> {
 
 
     @Query(value = "SELECT * FROM vw_mst_customer WHERE customer_id= ?1",nativeQuery = true)
-    List<Customer> getCustomerById(String customerId);
+    Optional<Customer> getCustomerById(String customerId);
 
-    Optional<Sales> findByCustomerId(String id);
+    @Query(value = "SELECT * FROM vw_mst_customer WHERE customer_id= ?1",nativeQuery = true)
+    Optional<Customer> getCustomerByIdV2(String customerId);
+
+
 
 }
