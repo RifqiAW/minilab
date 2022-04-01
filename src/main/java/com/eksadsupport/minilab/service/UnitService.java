@@ -14,18 +14,33 @@ public class UnitService {
     @Autowired
     private UnitRepository ur;
 
-    public GetUnit saveUnit(String unitId, String unitSeriesName, String dealerId, int unitQuantity, String unitColor, String unitStatus, double averageCost){
+    public GetUnit saveUnit(String unitId, String unitSeriesName, String dealerId, String unitQuantity, String unitColor, String unitStatus, String averageCost){
         ur.save(unitId, unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
-        return new GetUnit(unitId, unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
+        Unit unit = ur.getByUnitId(unitId);
+        try{
+            return new GetUnit(unit.getUnitId(), unit.getUnitSeriesName(),
+                    unit.getDealer().getDealerId(), unit.getUnitQuantity(),
+                    unit.getUnitColor(), unit.getUnitStatus(), unit.getAverageCost());
+        }catch (Exception e){
+            return new GetUnit(unit.getUnitId(), unit.getUnitSeriesName(),
+                    unit.getDealer().getDealerId(), unit.getUnitQuantity(),
+                    unit.getUnitColor(), unit.getUnitStatus(), unit.getAverageCost());
+        }
     }
 
-    public Optional<Unit> findByUnitId(String unitId){
-        return ur.findByUnitId(unitId);
-    }
-
-    public GetUnit updateUnit(String unitId, String unitSeriesName, String dealerId, int unitQuantity, String unitColor, String unitStatus, double averageCost){
+    public GetUnit updateUnit(String unitId, String unitSeriesName, String dealerId, String unitQuantity, String unitColor, String unitStatus, String averageCost){
         ur.save(unitId, unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
-        return new GetUnit(unitId, unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
+
+        Unit unit = ur.getByUnitId(unitId);
+        try{
+            return new GetUnit(unit.getUnitId(), unit.getUnitSeriesName(),
+                    unit.getDealer().getDealerId(), unit.getUnitQuantity(),
+                    unit.getUnitColor(), unit.getUnitStatus(), unit.getAverageCost());
+        }catch (Exception e){
+            return new GetUnit(unit.getUnitId(), unit.getUnitSeriesName(),
+                    unit.getDealer().getDealerId(), unit.getUnitQuantity(),
+                    unit.getUnitColor(), unit.getUnitStatus(), unit.getAverageCost());
+        }
     }
 
 //    public List<Sales> listAll(String dealerId, String salesStatus, String salesName, int limit, int offset){
@@ -39,4 +54,22 @@ public class UnitService {
 //    public Page<Sales> listEverything(Pageable pageable){
 //        return sr.listEverything(pageable);
 //    }
+
+    public GetUnit get(String unitId){
+        Unit unit = ur.getByUnitId(unitId);
+        try{
+            return new GetUnit(unit.getUnitId(), unit.getUnitSeriesName(),
+                    unit.getDealer().getDealerId(), unit.getUnitQuantity(),
+                    unit.getUnitColor(), unit.getUnitStatus(), unit.getAverageCost());
+        }catch (Exception e){
+            return new GetUnit(unit.getUnitId(), unit.getUnitSeriesName(),
+                    unit.getDealer().getDealerId(), unit.getUnitQuantity(),
+                    unit.getUnitColor(), unit.getUnitStatus(), unit.getAverageCost());
+        }
+    }
+
+    public Optional<Unit> findByUnitId(String unitId){
+        return ur.findByUnitId(unitId);
+    }
+
 }

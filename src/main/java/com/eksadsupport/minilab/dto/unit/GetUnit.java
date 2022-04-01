@@ -5,19 +5,19 @@ public class GetUnit {
     private String unitId;
     private String unitSeriesName;
     private String dealerId;
-    private int unitQuantity;
+    private String unitQuantity;
     private String unitColor;
     private String unitStatus;
-    private float averageCost;
+    private String averageCost;
 
-    public GetUnit(String unitId, String unitSeriesName, String dealerId, int unitQuantity, String unitColor, String unitStatus, double averageCost) {
+    public GetUnit(String unitId, String unitSeriesName, String dealerId, String unitQuantity, String unitColor, String unitStatus, String averageCost) {
         this.unitId = unitId;
         this.unitSeriesName = unitSeriesName;
         this.dealerId = dealerId;
         this.unitQuantity = unitQuantity;
         this.unitColor = unitColor;
         this.unitStatus = unitStatus;
-        this.averageCost = (float) averageCost;
+        this.averageCost = averageCost;
     }
 
     public String getUnitId() {
@@ -44,11 +44,11 @@ public class GetUnit {
         this.dealerId = dealerId;
     }
 
-    public int getUnitQuantity() {
+    public String getUnitQuantity() {
         return unitQuantity;
     }
 
-    public void setUnitQuantity(int unitQuantity) {
+    public void setUnitQuantity(String unitQuantity) {
         this.unitQuantity = unitQuantity;
     }
 
@@ -68,11 +68,11 @@ public class GetUnit {
         this.unitStatus = unitStatus;
     }
 
-    public float getAverageCost() {
+    public String getAverageCost() {
         return averageCost;
     }
 
-    public void setAverageCost(float averageCost) {
+    public void setAverageCost(String averageCost) {
         this.averageCost = averageCost;
     }
 }

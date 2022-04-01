@@ -17,7 +17,7 @@ public interface UnitRepository extends JpaRepository<Unit, String>, JpaSpecific
     @Modifying
     @Query(value = "insert into mst_unit(unit_id, unit_series_name, dealer_code, unit_quantity, unit_color, unit_status, average_cost) values (?1, ?2, ?3, ?4, ?5, ?6, ?7)", nativeQuery = true)
     @Transactional
-    void save(String unitId, String unitSeriesName, String dealerId, int unitQuantity, String unitColor, String unitStatus, double averageCost);
+    void save(String unitId, String unitSeriesName, String dealerId, String unitQuantity, String unitColor, String unitStatus, String averageCost);
 
 
     @Modifying
