@@ -6,12 +6,12 @@ public class GetOrder {
     private String dealerCode;
     private String salesId;
     private String customerId;
-    private int minimumPayment;
-    private int totalValue;
-    private int orderValue;
-    private int offtheroadValue;
-    private int orderDiscount;
-    private int ppn;
+    private double minimumPayment;
+    private double totalValue;
+    private double orderValue;
+    private double offtheroadValue;
+    private double orderDiscount;
+    private double ppn;
     private String platNomor;
     private String nomorMesin;
     private String nomorRangka;
@@ -25,12 +25,12 @@ public class GetOrder {
         this.dealerCode = dealerCode;
         this.salesId = salesId;
         this.customerId = customerId;
-        this.minimumPayment = (int)Math.ceil(minimumPayment);
-        this.totalValue = (int)Math.ceil(totalValue);
-        this.orderValue = (int)Math.ceil(orderValue);
-        this.offtheroadValue = (int)Math.ceil(offtheroadValue);
-        this.orderDiscount = (int)Math.ceil(orderDiscount);
-        this.ppn = (int)Math.ceil(ppn);
+        this.minimumPayment = minimumPayment;
+        this.totalValue = totalValue;
+        this.orderValue = orderValue;
+        this.offtheroadValue = offtheroadValue;
+        this.orderDiscount = orderDiscount;
+        this.ppn = ppn;
         this.platNomor = platNomor;
         this.nomorMesin = nomorMesin;
         this.nomorRangka = nomorRangka;
@@ -79,51 +79,51 @@ public class GetOrder {
         this.customerId = customerId;
     }
 
-    public int getMinimumPayment() {
+    public double getMinimumPayment() {
         return minimumPayment;
     }
 
-    public void setMinimumPayment(int minimumPayment) {
+    public void setMinimumPayment(double minimumPayment) {
         this.minimumPayment = minimumPayment;
     }
 
-    public int getTotalValue() {
+    public double getTotalValue() {
         return totalValue;
     }
 
-    public void setTotalValue(int totalValue) {
+    public void setTotalValue(double totalValue) {
         this.totalValue = totalValue;
     }
 
-    public int getOrderValue() {
+    public double getOrderValue() {
         return orderValue;
     }
 
-    public void setOrderValue(int orderValue) {
+    public void setOrderValue(double orderValue) {
         this.orderValue = orderValue;
     }
 
-    public int getOfftheroadValue() {
+    public double getOfftheroadValue() {
         return offtheroadValue;
     }
 
-    public void setOfftheroadValue(int offtheroadValue) {
+    public void setOfftheroadValue(double offtheroadValue) {
         this.offtheroadValue = offtheroadValue;
     }
 
-    public int getOrderDiscount() {
+    public double getOrderDiscount() {
         return orderDiscount;
     }
 
-    public void setOrderDiscount(int orderDiscount) {
+    public void setOrderDiscount(double orderDiscount) {
         this.orderDiscount = orderDiscount;
     }
 
-    public int getPpn() {
+    public double getPpn() {
         return ppn;
     }
 
-    public void setPpn(int ppn) {
+    public void setPpn(double ppn) {
         this.ppn = ppn;
     }
 

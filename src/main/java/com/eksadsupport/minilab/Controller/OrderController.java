@@ -53,8 +53,8 @@ public class OrderController {
             if(orderId.isEmpty() && (unitCode.isEmpty() || dealerCode.isEmpty() || salesId.isEmpty() ||
                     customerId.isEmpty() || minimumPayment.isEmpty() || totalValue.isEmpty() || orderValue.isEmpty() ||
                     offtheroadValue.isEmpty() || orderDiscount.isEmpty() || ppn.isEmpty() || paymentStatus.isEmpty() ||
-                    unitStatus.isEmpty() || Integer.parseInt(ppn) < 0 ||
-                    Integer.parseInt(totalValue) != Integer.parseInt(orderValue) - Integer.parseInt(orderDiscount) ||
+                    unitStatus.isEmpty() || Double.parseDouble(ppn) < 0 ||
+                    Double.parseDouble(totalValue) != Double.parseDouble(orderValue) - Double.parseDouble(orderDiscount) ||
                     (isLeasing.equalsIgnoreCase("NO") && !paymentStatus.equalsIgnoreCase("FULLY_PAID")) ||
                     (isLeasing.equalsIgnoreCase("YES") && !paymentStatus.equalsIgnoreCase("PARTIAL_PAID"))
                     )){
@@ -159,8 +159,8 @@ public class OrderController {
                 }
             }
 
-            if (Integer.parseInt(ppn) < 0 ||
-                    Integer.parseInt(totalValue) != Integer.parseInt(orderValue) - Integer.parseInt(orderDiscount) ||
+            if (Double.parseDouble(ppn) < 0 ||
+                    Double.parseDouble(totalValue) != Double.parseDouble(orderValue) - Double.parseDouble(orderDiscount) ||
                     (isLeasing.equalsIgnoreCase("NO") && !paymentStatus.equalsIgnoreCase("FULLY_PAID")) ||
                     (isLeasing.equalsIgnoreCase("YES") && !paymentStatus.equalsIgnoreCase("PARTIAL_PAID"))
             ){

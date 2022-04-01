@@ -20,13 +20,13 @@ CREATE VIEW vw_mst_sales AS select * from mst_sales
 
 --CREATE VIEW vw_mst_sales AS select sales_id as sales_id, sales_name as salesName, dealer_code as dealerCode, supervisor_id as supervisorId, sales_gender as salesGender, sales_email as salesEmail, sales_status as salesStatus from mst_sales
 
-CREATE TABLE IF NOT EXISTS mst_ppn(ppn_id VARCHAR(50) NOT NULL, Description VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, effective_start_date Date NOT NULL, effective_end_date Date, ppn_rate float(8) NOT NULL, ppn_rate_previous float(8), ppn_status VARCHAR(10) NOT NULL CHECK(ppn_status IN ('ACTIVE', 'INACTIVE')), PRIMARY KEY (ppn_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code))
+CREATE TABLE IF NOT EXISTS mst_ppn(ppn_id VARCHAR(50) NOT NULL, Description VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, effective_start_date Date NOT NULL, effective_end_date Date, ppn_rate DOUBLE PRECISION NOT NULL, ppn_rate_previous DOUBLE PRECISION, ppn_status VARCHAR(10) NOT NULL CHECK(ppn_status IN ('ACTIVE', 'INACTIVE')), PRIMARY KEY (ppn_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code))
 
 CREATE TABLE IF NOT EXISTS mst_customer(customer_id VARCHAR(50) NOT NULL, customer_address VARCHAR(512) NOT NULL, customer_email VARCHAR(255), customer_gender VARCHAR(4) NOT NULL CHECK(customer_gender IN ('GTLK', 'GTPR')), customer_hp_number VARCHAR(255), customer_kk VARCHAR(50) NOT NULL, customer_name VARCHAR(255) NOT NULL, customer_nik VARCHAR(50) NOT NULL, customer_status VARCHAR(10) NOT NULL CHECK(customer_status IN ('ACTIVE', 'INACTIVE')), customer_telp_number VARCHAR(50), sales_id VARCHAR(50) NOT NULL, dealer_code VARCHAR(50) NOT NULL, PRIMARY KEY (customer_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code), FOREIGN KEY (sales_id) REFERENCES mst_sales(sales_id))
 
 CREATE VIEW vw_mst_customer AS select * from mst_customer
 
-CREATE TABLE IF NOT EXISTS mst_unit(unit_id VARCHAR(50) NOT NULL, unit_series_name VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, unit_quantity INTEGER, unit_color VARCHAR(512) NOT NULL, unit_status VARCHAR(10) NOT NULL CHECK(unit_status IN ('ACTIVE', 'INACTIVE')), average_cost FLOAT(8) NOT NULL, PRIMARY KEY (unit_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code))
+CREATE TABLE IF NOT EXISTS mst_unit(unit_id VARCHAR(50) NOT NULL, unit_series_name VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, unit_quantity INTEGER, unit_color VARCHAR(512) NOT NULL, unit_status VARCHAR(10) NOT NULL CHECK(unit_status IN ('ACTIVE', 'INACTIVE')), average_cost DOUBLE PRECISION NOT NULL, PRIMARY KEY (unit_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code))
 
 CREATE VIEW vw_mst_unit AS select * from mst_unit
 

@@ -39,7 +39,7 @@ public class SalesController {
             String salesEmail = valueToStringOrEmpty(inputPayload, "salesEmail");
             String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus").toUpperCase(Locale.ROOT);
 
-            if(checkStringIfNulllOrEmpty(salesId) && (!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
+            if(checkStringIfNulllOrEmpty(salesId) && (!checkIfValidEmail(salesEmail) || checkStringIfNulllOrEmpty(salesName)
                 || checkStringIfNulllOrEmpty(dealerId) || checkStringIfNulllOrEmpty(salesGender) || checkStringIfNulllOrEmpty(salesEmail)
                 || checkStringIfNulllOrEmpty(salesStatus))){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
@@ -85,7 +85,7 @@ public class SalesController {
                 }
             }
 
-            if(!checkStringIfAlphabets(salesName) || !checkIfValidEmail(salesEmail)){
+            if(!checkIfValidEmail(salesEmail)){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
 
@@ -123,10 +123,10 @@ public class SalesController {
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
 
-            if(!limit_s.isEmpty()){
+            if(!limit_s.isEmpty() || Integer.parseInt(limit_s) < 0){
                 limit = Integer.parseInt(limit_s);
             }
-            if(!offset_s.isEmpty()){
+            if(!offset_s.isEmpty() || Integer.parseInt(offset_s) < 1){
                 offset = Integer.parseInt(offset_s);
             }
 
