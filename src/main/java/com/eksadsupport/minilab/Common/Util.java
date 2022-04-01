@@ -55,4 +55,13 @@ public class Util {
         }
         return true;
     }
+
+
+    public static boolean checkIfValidTelp(String s) {
+        if (s.matches("\\d[0-9]{0,2}[-]*[0-9]{8}")) {
+            return true;
+        }
+        return false;
+
+    }
 }
