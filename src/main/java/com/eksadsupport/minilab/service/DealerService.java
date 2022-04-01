@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,22 +29,35 @@ public class DealerService {
         return dr.CreateDealer(dealerId,dealerName,dealerClass,telpNumber,alamat,dealerExtCode,dealerStatus);
     }
 
-    public int getUpdate(String dealerName,String dealerId){
-        return dr.UpdateDealer(dealerName,dealerId);
+    public int getUpdateAll(String dealerId,String dealerName,String dealerClass,String telpNumber,String alamat,String dealerExtCode, String dealerStatus){
+        return dr.UpdateDealerAll(dealerId,dealerName,dealerClass,telpNumber,alamat,dealerExtCode,dealerStatus);
     }
-
 
     public Optional<Dealer> findbyID(String dealerId){
         return dr.findById(dealerId);
     }
 
-    public Optional<Dealer> findId (String dealerId){
-        return dr.DealerById(dealerId);
+    public String cekIdDealer(String dealerId){
+        return dr.cekId(dealerId);
+    }
+    public String cekClassDealer(String dealerId){
+        return dr.cekClass(dealerId);
+    }
+    public String cekTelpDealer(String dealerId){
+        return dr.cekTelp(dealerId);
+    }
+    public String cekAlamatDealer(String dealerId){
+        return dr.cekAlamat(dealerId);
+    }
+    public String cekExtCode(String dealerId){
+        return dr.cekExt(dealerId);
+    }
+    public String cekStatusDealer(String dealerId){
+        return dr.cekStatus(dealerId);
     }
 
-
     public Page<Dealer> findwithPagination(String dealerId, String dealerStatus, String dealerName, int limit, int offset){
-        Page<Dealer> dealer = dr.ListAllDealer(dealerId,dealerStatus,dealerName, PageRequest.of(limit,offset));
+        Page<Dealer> dealer = dr.ListAllDealer(dealerId,dealerStatus,dealerName,PageRequest.of(limit,offset));
         return dealer;
     }
 
@@ -76,19 +88,50 @@ public class DealerService {
         //getDealerList.setDataOfRecord(limit);
         return getDealerList;
     }
-    public DealerListAll dealerListAll2(String dealerId,String dealerStatus,String dealerName,int limit, int offset) {
+    public DealerListAll dealerListAllOr(String dealerId,String dealerStatus,String dealerName,int limit, int offset) {
         DealerListAll getDealerList = new DealerListAll();
         GetDealer getDealer = new GetDealer();
-        List<Dealer> opt = dr.ViewDealer(dealerId, dealerStatus, dealerName, limit, offset);
-
+        //List<Dealer> opt = dr.ViewDealer(dealerId, dealerStatus, dealerName, limit, offset);
+        List<Dealer> opt = dr.ViewDealer2(dealerId, dealerStatus, dealerName, limit, offset);
         getDealerList.setStatus(Constants.STATUS);
         getDealerList.setCode(Constants.CODE);
         getDealerList.setMessage(Constants.MESSAGE);
         getDealer.setListdealer(opt);
         getDealerList.setData(getDealer);
+        getDealerList.setDataOfRecord(opt.size());
+
+        return getDealerList;
+    }
+
+    public DealerListAll dealerListAllAnd(String dealerId,String dealerStatus,String dealerName,int limit, int offset) {
+        DealerListAll getDealerList = new DealerListAll();
+        GetDealer getDealer = new GetDealer();
+        List<Dealer> opt = dr.ViewDealer(dealerId, dealerStatus, dealerName, limit, offset);
+        //List<Dealer> opt = dr.ViewDealer2(dealerId, dealerStatus, dealerName, limit, offset);
+        getDealerList.setStatus(Constants.STATUS);
+        getDealerList.setCode(Constants.CODE);
+        getDealerList.setMessage(Constants.MESSAGE);
+        getDealer.setListdealer(opt);
+        getDealerList.setData(getDealer);
+        getDealerList.setDataOfRecord(opt.size());
+        return getDealerList;
+
+    }
+    public DealerListAll dealerListAllID(String dealerId,String dealerStatus,String dealerName,int limit, int offset) {
+        DealerListAll getDealerList = new DealerListAll();
+        GetDealer getDealer = new GetDealer();
+        List<Dealer> opt = dr.SearchId(dealerId);
+        //List<Dealer> opt = dr.ViewDealer(dealerId, dealerStatus, dealerName, limit, offset);
+        //List<Dealer> opt = dr.ViewDealer2(dealerId, dealerStatus, dealerName, limit, offset);
+        getDealerList.setStatus(Constants.STATUS);
+        getDealerList.setCode(Constants.CODE);
+        getDealerList.setMessage(Constants.MESSAGE);
+        getDealer.setListdealer(opt);
+        getDealerList.setData(getDealer);
+        getDealerList.setDataOfRecord(opt.size());
 
         return getDealerList;
 
     }
-}
 
+}
