@@ -2,6 +2,7 @@ package com.eksadsupport.minilab.Controller;
 
 
 import com.eksadsupport.minilab.Common.CheckUtils;
+import com.eksadsupport.minilab.Common.Util;
 import com.eksadsupport.minilab.domain.Dealer;
 import com.eksadsupport.minilab.dto.dealer.ResponseSave;
 import com.eksadsupport.minilab.service.DealerService;
@@ -24,7 +25,7 @@ public class DealerControllerCmd {
     DealerService ds;
 
     @PostMapping("save")
-    public ResponseEntity<Object> saveAll(
+    public ResponseEntity<Object>saveAll(
             @RequestBody Map<String,Object> request
     ){
         ResponseSave responseSave = new ResponseSave();
@@ -39,6 +40,7 @@ public class DealerControllerCmd {
         try {
             String class1 = "H23"; String class2 = "H123";
             String status1 = "ACTIVE"; String status2="INACTIVE";
+            String blank = "";
             try {
 
                 //FITUR INSERT
@@ -46,12 +48,14 @@ public class DealerControllerCmd {
                     responseSave.responseNoContent();
                     return new ResponseEntity<>(responseSave, HttpStatus.BAD_REQUEST);
                 } else {
-                    if (dealerClass.equals(class1)||dealerClass.equals(class2)) {
-                        if(dealerStatus.equals(status1)||dealerStatus.equals(status2)) {
-                            int insertDealer = ds.getCreate(dealerId, dealerName, dealerClass, telpNumber, alamat, dealerExtCode, dealerStatus);
-                            Optional<Dealer> dealerList = ds.findbyID(dealerId);
-                            responseSave.responseSuccess(dealerList);
-                            return new ResponseEntity<>(responseSave, HttpStatus.OK);
+                    if (dealerClass.equals(class1)||dealerClass.equals(class2)||dealerClass.equals(blank)) {
+                        if(dealerStatus.equals(status1)||dealerStatus.equals(status2)||dealerStatus.equals(blank)) {
+                            if (Util.checkIfValidTelp(telpNumber)) {
+                                int insertDealer = ds.getCreate(dealerId, dealerName, dealerClass, telpNumber, alamat, dealerExtCode, dealerStatus);
+                                Optional<Dealer> dealerList = ds.findbyID(dealerId);
+                                responseSave.responseSuccess(dealerList);
+                                return new ResponseEntity<>(responseSave, HttpStatus.OK);
+                            }
                         }
                     }
                 }
@@ -82,11 +86,13 @@ public class DealerControllerCmd {
                         String stat = ds.cekStatusDealer(dealerId);
                         dealerStatus = stat;
                     }
-                    int editDealer = ds.getUpdateAll(dealerId,dealerName,dealerClass,telpNumber,alamat,dealerExtCode,dealerStatus);
+                    int editDealer = ds.getUpdateAll(dealerId, dealerName, dealerClass, telpNumber, alamat, dealerExtCode, dealerStatus);
                     Optional<Dealer> dealerList = ds.findbyID(dealerId);
                     responseSave.responseSuccess(dealerList);
                     return new ResponseEntity<>(responseSave, HttpStatus.OK);
                 }
+
+
             }
 
         } catch (Exception e){
@@ -100,4 +106,3 @@ public class DealerControllerCmd {
 
 
 }
-
