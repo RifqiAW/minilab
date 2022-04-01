@@ -1,5 +1,6 @@
 package com.eksadsupport.minilab.repository;
 
+import com.eksadsupport.minilab.domain.Customer;
 import com.eksadsupport.minilab.domain.Unit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 public interface UnitRepository extends JpaRepository<Unit, String>, JpaSpecificationExecutor<Unit> {
@@ -25,6 +27,9 @@ public interface UnitRepository extends JpaRepository<Unit, String>, JpaSpecific
     @Transactional
     void update(String unitId, String unitSeriesName, String dealerId, String unitQuantity, String unitColor, String unitStatus, double averageCost);
 
+//    @Transactional
+//    @Query(value = "SELECT * FROM vw_mst_unit where  dealer_code =?1 and lower(customer_name) like %?2% LIMIT ?3 OFFSET ?4",nativeQuery = true)
+//    List<Unit> listAll(String dealerId, String unitSeriesName, int limit, int offset);
 
     @Query(value = "select * from mst_unit where unit_id = ?1", nativeQuery = true)
     Unit getByUnitId(String unitId);
