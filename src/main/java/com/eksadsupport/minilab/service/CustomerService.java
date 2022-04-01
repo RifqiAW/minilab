@@ -20,15 +20,15 @@ public class CustomerService {
     CustomerRepository cr;
 
 
-    public Customer addCus(String customerId, String customerName, String dealerId, String customerGender,
-                           String customerNik, String customerKk, String customerEmail, String customerAddress,
-                           String customerTelp, String customerHp,
-                           String customerStatus, String salesId) {
+    public int addCus(String customerId, String customerName, String dealerId, String customerGender,
+                      String customerNik, String customerKk, String customerEmail, String customerAddress,
+                      String customerTelp, String customerHp,
+                      String customerStatus, String salesId) {
         return cr.addCustomer(customerId, customerName, dealerId, customerGender, customerNik, customerKk,
                 customerEmail, customerAddress, customerTelp, customerHp, customerStatus, salesId);
     }
 
-    public Customer updateCus(String customerName, String dealerId, String customerGender,
+    public int updateCus(String customerName, String dealerId, String customerGender,
                          String customerNik, String customerKk, String customerEmail, String customerAddress,
                          String customerTelp, String customerHp, String customerStatus, String salesId, String customerId) {
         return cr.updateCustomer(customerName, dealerId, customerGender, customerNik, customerKk, customerEmail, customerAddress,
@@ -38,16 +38,35 @@ public class CustomerService {
 
     public GetCustomerDTO getCustomerDTO(String customerId) {
         GetCustomerDTO getCustomerDTO = new GetCustomerDTO();
-        Optional<Customer> opt = cr.findById(customerId);
+        Optional<Customer> opt = cr.getCustomerById(customerId);
 
-        getCustomerDTO.setCustomer_id(opt.get().getCustomerId());
+        getCustomerDTO.setCustomerId(opt.get().getCustomerId());
         getCustomerDTO.setCustomerNama(opt.get().getCustomerName());
         getCustomerDTO.setDealerId(opt.get().getDealer().getDealerId());
         getCustomerDTO.setCustomerGender(opt.get().getCustomerGender());
         getCustomerDTO.setCustomerNik(opt.get().getCustomerNik());
         getCustomerDTO.setCustomerKk(opt.get().getCustomerKk());
         getCustomerDTO.setCustomerEmail(opt.get().getCustomerEmail());
+        getCustomerDTO.setCustomerAddress(opt.get().getCustomerAddress());
+        getCustomerDTO.setCustomerTelp(opt.get().getCustomerTelp());
+        getCustomerDTO.setCustomerHp(opt.get().getCustomerHp());
+        getCustomerDTO.setSalesId(opt.get().getSales().getSalesId());
+        getCustomerDTO.setCustomerStatus(opt.get().getCustomerStatus());
 
+        return getCustomerDTO;
+    }
+
+    public GetCustomerDTO getAll(String customerId) {
+        GetCustomerDTO getCustomerDTO = new GetCustomerDTO();
+        Optional<Customer> opt = cr.getCustomerByIdV2(customerId);
+
+        getCustomerDTO.setCustomerId(opt.get().getCustomerId());
+        getCustomerDTO.setCustomerNama(opt.get().getCustomerName());
+        getCustomerDTO.setDealerId(opt.get().getDealer().getDealerId());
+        getCustomerDTO.setCustomerGender(opt.get().getCustomerGender());
+        getCustomerDTO.setCustomerNik(opt.get().getCustomerNik());
+        getCustomerDTO.setCustomerKk(opt.get().getCustomerKk());
+        getCustomerDTO.setCustomerEmail(opt.get().getCustomerEmail());
         getCustomerDTO.setCustomerAddress(opt.get().getCustomerAddress());
         getCustomerDTO.setCustomerTelp(opt.get().getCustomerTelp());
         getCustomerDTO.setCustomerHp(opt.get().getCustomerHp());
@@ -79,7 +98,7 @@ public class CustomerService {
 
     public GetCustomerById getCustomerById(String customerId) {
         GetCustomerById cusById = new GetCustomerById();
-        Optional<Customer>opt = cr.findById(customerId);
+        Optional<Customer> opt = cr.findById(customerId);
         cusById.setCustomerId(opt.get().getCustomerId());
         cusById.setCustomerNama(opt.get().getCustomerName());
         cusById.setDealerId(opt.get().getDealer().getDealerId());
@@ -93,7 +112,8 @@ public class CustomerService {
 
 
     }
-    public Optional<Customer> findByCustomerId(String customerId){
+
+    public Optional<Customer> findByCustomerId(String customerId) {
         return cr.findById(customerId);
     }
 }
