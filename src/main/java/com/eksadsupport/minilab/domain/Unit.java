@@ -1,9 +1,8 @@
 package com.eksadsupport.minilab.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -18,18 +17,14 @@ public class Unit {
     @Column(name = "unit_series_name")
     private String unitSeriesName;
 
-    @Size (max = 50)
-    @Column(name = "dealer_id")
-    private String dealerId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="dealer_id")
-//    @JsonIgnore
-//    private Dealer dealer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="dealer_code")
+    @JsonIgnore
+    private Dealer dealer;
 
     @Size (max = 4)
     @Column(name = "unit_quantity")
-    private int unitQuantity;
+    private String unitQuantity;
 
     @Size (max = 512)
     @Column(name = "unit_color")
@@ -40,7 +35,7 @@ public class Unit {
     private String unitStatus;
 
     @Column(name = "average_cost")
-    private double averageCost;
+    private String averageCost;
 
     public String getUnitId() {
         return unitId;
@@ -58,19 +53,12 @@ public class Unit {
         this.unitSeriesName = unitSeriesName;
     }
 
-    public String getDealerId() {
-        return dealerId;
-    }
 
-    public void setDealerId(String dealerId) {
-        this.dealerId = dealerId;
-    }
-
-    public int getUnitQuantity() {
+    public String getUnitQuantity() {
         return unitQuantity;
     }
 
-    public void setUnitQuantity(int unitQuantity) {
+    public void setUnitQuantity(String unitQuantity) {
         this.unitQuantity = unitQuantity;
     }
 
@@ -90,21 +78,21 @@ public class Unit {
         this.unitStatus = unitStatus;
     }
 
-    public double getAverageCost() {
+    public String getAverageCost() {
         return averageCost;
     }
 
-    public void setAverageCost(double averageCost) {
+    public void setAverageCost(String averageCost) {
         this.averageCost = averageCost;
     }
 
-    //    public Dealer getDealer() {
-//        return dealer;
-//    }
-//
-//    public void setDealer(Dealer dealer) {
-//        this.dealer = dealer;
-//    }
+    public Dealer getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
 
 }
 

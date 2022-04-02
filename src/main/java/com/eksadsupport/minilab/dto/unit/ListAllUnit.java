@@ -1,7 +1,6 @@
 package com.eksadsupport.minilab.dto.unit;
 
-public class GetUnit {
-
+public class ListAllUnit {
     private String unitId;
     private String unitSeriesName;
     private String dealerId;
@@ -9,16 +8,6 @@ public class GetUnit {
     private String unitColor;
     private String unitStatus;
     private String averageCost;
-
-    public GetUnit(String unitId, String unitSeriesName, String dealerId, String unitQuantity, String unitColor, String unitStatus, String averageCost) {
-        this.unitId = unitId;
-        this.unitSeriesName = unitSeriesName;
-        this.dealerId = dealerId;
-        this.unitQuantity = unitQuantity;
-        this.unitColor = unitColor;
-        this.unitStatus = unitStatus;
-        this.averageCost = averageCost;
-    }
 
     public String getUnitId() {
         return unitId;

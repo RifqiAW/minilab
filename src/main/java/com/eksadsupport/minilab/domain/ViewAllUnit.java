@@ -1,24 +1,24 @@
-package com.eksadsupport.minilab.dto.unit;
+package com.eksadsupport.minilab.domain;
 
-public class GetUnit {
+import org.hibernate.annotations.Immutable;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Immutable
+@Table(name = "vw_mst_unit")
+public class ViewAllUnit {
+
+    @Id
     private String unitId;
     private String unitSeriesName;
-    private String dealerId;
+    private String dealerCode;
     private String unitQuantity;
     private String unitColor;
     private String unitStatus;
     private String averageCost;
-
-    public GetUnit(String unitId, String unitSeriesName, String dealerId, String unitQuantity, String unitColor, String unitStatus, String averageCost) {
-        this.unitId = unitId;
-        this.unitSeriesName = unitSeriesName;
-        this.dealerId = dealerId;
-        this.unitQuantity = unitQuantity;
-        this.unitColor = unitColor;
-        this.unitStatus = unitStatus;
-        this.averageCost = averageCost;
-    }
 
     public String getUnitId() {
         return unitId;
@@ -36,12 +36,12 @@ public class GetUnit {
         this.unitSeriesName = unitSeriesName;
     }
 
-    public String getDealerId() {
-        return dealerId;
+    public String getDealerCode() {
+        return dealerCode;
     }
 
-    public void setDealerId(String dealerId) {
-        this.dealerId = dealerId;
+    public void setDealerCode(String dealerCode) {
+        this.dealerCode = dealerCode;
     }
 
     public String getUnitQuantity() {
