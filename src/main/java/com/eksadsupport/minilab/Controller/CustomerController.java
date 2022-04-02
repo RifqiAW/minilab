@@ -48,6 +48,11 @@ public class CustomerController {
 
 
             if (checkStringIfNulllOrEmpty(customerId)) {
+                if(!checkIfValidTelp2(customerTelp)){
+                    return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+                }else if(!checkIfValidTHp(customerHp)){
+                    return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+                }
                 if (!checkStringIfAlphabets(customerName) || !checkIfValidEmail(customerEmail)) {
                     return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
                 }

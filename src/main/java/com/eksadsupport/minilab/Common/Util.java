@@ -64,4 +64,18 @@ public class Util {
         return false;
 
     }
+
+
+    public static boolean checkIfValidTelp2(String s){
+        if(s.matches("021-[0-9]{8}")){
+            return true;
+        }
+        return false;
+    }
+    public static boolean checkIfValidTHp(String s){
+        if(s.matches("^(\\+\\d{1,14})")){
+            return true;
+        }
+        return false;
+    }
 }
