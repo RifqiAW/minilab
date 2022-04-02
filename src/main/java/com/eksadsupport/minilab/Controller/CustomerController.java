@@ -138,7 +138,7 @@ public class CustomerController {
                 ret.put("status", "S");
                 ret.put("code", "201");
                 ret.put("message", "Process Success");
-                ret.put("data", cs.listAll(dealerId, customerName, limit, offset));
+                ret.put("List Customer", cs.listAll(dealerId, customerName, limit, offset));
                 ret.put("dataOfRecord", index.size());
                 return new ResponseEntity<>(ret, HttpStatus.OK);
             }
