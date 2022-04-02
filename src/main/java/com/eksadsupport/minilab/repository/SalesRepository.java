@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SalesRepository extends JpaRepository<Sales, Long>, JpaSpecificationExecutor<Sales> {
@@ -30,4 +31,7 @@ public interface SalesRepository extends JpaRepository<Sales, Long>, JpaSpecific
     Optional<Sales> findBySalesId(String id);
 
     Page<Sales> findAll(Specification<Sales> spec, Pageable pageable);
+
+    @Query(value = "select * from mst_sales where sales_id like ?1 or dealer_code like ?2", nativeQuery = true)
+    List<Sales> testingParam(String salesId, String dealerId);
 }

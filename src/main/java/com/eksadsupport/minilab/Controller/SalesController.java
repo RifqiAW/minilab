@@ -204,5 +204,12 @@ public class SalesController {
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<Object> test(@RequestBody Map<String, Object> inputPayload){
+        String salesId = valueToStringOrEmpty(inputPayload, "salesId");
+        String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
+        return new ResponseEntity<>(ss.test(salesId, dealerId), HttpStatus.OK);
+    }
 }
 
