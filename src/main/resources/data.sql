@@ -1,4 +1,4 @@
-insert into mst_dealer(dealer_code,dealer_name,dealer_class,telp_number,alamat,dealer_status,dealer_ext_code)values('100005','AHASS Jakarta','H123','0218765432','Jl.Kuningan Raya','ACTIVE','103553');
+insert into mst_dealer(dealer_code,dealer_name,dealer_class,telp_number,alamat,dealer_status,dealer_ext_code)values('100000','AHASS Jakarta','H123','021-87654321','Jl.Kuningan Raya','ACTIVE','103553');
 
 insert into mst_sales(sales_id, sales_name, dealer_code, supervisor_id, sales_gender, sales_email, sales_status) values ('M1', 'Offline', '100005', NULL, 'GTLK', 'asd', 'INACTIVE');
 
