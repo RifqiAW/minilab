@@ -4,6 +4,7 @@ import com.eksadsupport.minilab.domain.Ppn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface PpnRepository {
+public interface PpnRepository extends JpaRepository<Ppn, Long> {
     @Modifying
     @Query(value = "insert into mst_ppn (ppn_id, dealer_code, description, ppn_rate, ppn_rate_previous, " +
             "effective_start_date, effective_end_date, ppn_status)" +

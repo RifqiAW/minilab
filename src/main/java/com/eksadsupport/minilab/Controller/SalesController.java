@@ -1,13 +1,18 @@
 package com.eksadsupport.minilab.Controller;
 
+import com.eksadsupport.minilab.Common.GenerateJWT;
 import com.eksadsupport.minilab.domain.Sales;
 import com.eksadsupport.minilab.domain.ViewAllSales;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
+import com.eksadsupport.minilab.dto.response.ResponseUnauthorized;
 import com.eksadsupport.minilab.dto.sales.GetListSales;
 import com.eksadsupport.minilab.dto.sales.GetSales;
 import com.eksadsupport.minilab.service.SalesService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -29,8 +34,10 @@ public class SalesController {
     private SalesService ss;
 
     @PostMapping("/save")
-    public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload){
+    public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload,
+                                       @RequestHeader(name = "token", required = false) String token){
         try{
+            Claims claims = GenerateJWT.validateToken(token);
             String salesId = valueToStringOrEmpty(inputPayload, "salesId");
             String salesName = valueToStringOrEmpty(inputPayload, "salesName");
             String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
@@ -98,6 +105,12 @@ public class SalesController {
                 return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }
         }
+        catch (ExpiredJwtException expired){
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (SignatureException e) {
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        }
         catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
@@ -108,8 +121,10 @@ public class SalesController {
     public int CONSTANTS_MAX_LIMIT;
 
     @PostMapping("/listAll")
-    public ResponseEntity<Object> listAll(@RequestBody Map<String, Object> inputPayload){
+    public ResponseEntity<Object> listAll(@RequestBody Map<String, Object> inputPayload,
+                                          @RequestHeader(name = "token", required = false) String token){
         try{
+            Claims claims = GenerateJWT.validateToken(token);
             String salesName = valueToStringOrEmpty(inputPayload, "salesName");
             String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
             String salesStatus = valueToStringOrEmpty(inputPayload, "salesStatus");
@@ -159,15 +174,24 @@ public class SalesController {
             getListSales.setDataOfRecord(pages.getTotalPages());
 
             return new ResponseEntity<>(new ResponseSuccess(getListSales), HttpStatus.OK);
-        }catch (Exception e){
+        }
+        catch (ExpiredJwtException expired){
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (SignatureException e) {
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{salesId}")
-    public ResponseEntity<Object> get(@PathVariable String salesId){
+    public ResponseEntity<Object> get(@PathVariable String salesId,
+                                      @RequestHeader(name = "token", required = false) String token){
         try{
+            Claims claims = GenerateJWT.validateToken(token);
             Optional<Sales> opt = ss.findBySalesId(salesId);
 
             if(!opt.isPresent()){
@@ -197,9 +221,14 @@ public class SalesController {
                 );
                 return new ResponseEntity<>(new ResponseSuccess(sales), HttpStatus.OK);
             }
-
-
-        }catch (Exception e){
+        }
+        catch (ExpiredJwtException expired){
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (SignatureException e) {
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }

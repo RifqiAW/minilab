@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 import static com.eksadsupport.minilab.Common.Util.*;
-import static com.eksadsupport.minilab.Common.Util.isValidId;
 
 @RestController
-@RequestMapping("ddms/v1/cmd/master/order")
+@RequestMapping("ddms/v1/cmd/transcation/order")
 public class OrderController {
 
     @Autowired
