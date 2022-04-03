@@ -15,10 +15,27 @@ public class ViewAllUnit {
     private String unitId;
     private String unitSeriesName;
     private String dealerCode;
-    private String unitQuantity;
+    private int unitQuantity;
     private String unitColor;
     private String unitStatus;
-    private String averageCost;
+
+    public void setUnitQuantity(int unitQuantity) {
+        this.unitQuantity = unitQuantity;
+    }
+
+    public void setAverageCost(double averageCost) {
+        this.averageCost = averageCost;
+    }
+
+    private double averageCost;
+
+    public int getUnitQuantity() {
+        return unitQuantity;
+    }
+
+    public double getAverageCost() {
+        return averageCost;
+    }
 
     public String getUnitId() {
         return unitId;
@@ -44,14 +61,6 @@ public class ViewAllUnit {
         this.dealerCode = dealerCode;
     }
 
-    public String getUnitQuantity() {
-        return unitQuantity;
-    }
-
-    public void setUnitQuantity(String unitQuantity) {
-        this.unitQuantity = unitQuantity;
-    }
-
     public String getUnitColor() {
         return unitColor;
     }
@@ -68,11 +77,4 @@ public class ViewAllUnit {
         this.unitStatus = unitStatus;
     }
 
-    public String getAverageCost() {
-        return averageCost;
-    }
-
-    public void setAverageCost(String averageCost) {
-        this.averageCost = averageCost;
-    }
 }

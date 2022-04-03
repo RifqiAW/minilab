@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.eksadsupport.minilab.Common.Constants.*;
+import static com.eksadsupport.minilab.Common.Constants.MESSAGE;
 import static com.eksadsupport.minilab.Common.Util.*;
+import static com.eksadsupport.minilab.Common.Util.checkValidKkDanKtp;
 
 
 @RestController
@@ -46,59 +49,60 @@ public class CustomerController {
             String salesId = request.get("salesId").toString();
 
 
-
             if (checkStringIfNulllOrEmpty(customerId)) {
-                if(!checkIfValidTelp2(customerTelp)){
-                    return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-                }else if(!checkIfValidTHp(customerHp)){
-                    return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-                }
-                if (!checkStringIfAlphabets(customerName) || !checkIfValidEmail(customerEmail)) {
+                if (!checkIfValidEmail(customerEmail) || !checkIfValidTelp2(customerTelp) || !checkIfValidTHp(customerHp)||
+                        !checkValidKkDanKtp(customerKk) || !checkValidKkDanKtp(customerNik)) {
                     return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
                 }
                 String genId=generateId();
                 int customer = cs.addCus(genId, customerName, dealerId, customerGender, customerNik, customerKk,
                         customerEmail, customerAddress, customerTelp, customerHp, customerStatus, salesId);
                 return new ResponseEntity<>(new ResponseSuccess(cs.getCustomerDTO(genId)), HttpStatus.OK);
-            } else {
-                if(checkStringIfNulllOrEmpty(customerName)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerName=opt.get().getCustomerName();
-                }else if(checkStringIfNulllOrEmpty(dealerId)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    dealerId=opt.get().getDealer().getDealerId();
-                }else if(checkStringIfNulllOrEmpty(customerGender)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerGender=opt.get().getCustomerGender();
-                }else if(checkStringIfNulllOrEmpty(customerNik)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerNik=opt.get().getCustomerNik();
-                }else if(checkStringIfNulllOrEmpty(customerKk)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerKk=opt.get().getCustomerKk();
-                }else if(checkStringIfNulllOrEmpty(customerEmail)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerEmail=opt.get().getCustomerEmail();
-                }else if(checkStringIfNulllOrEmpty(customerAddress)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerAddress=opt.get().getCustomerAddress();
-                }else if(checkStringIfNulllOrEmpty(customerTelp)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerTelp=opt.get().getCustomerTelp();
-                }else if(checkStringIfNulllOrEmpty(customerHp)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerHp=opt.get().getCustomerHp();
-                }else if(checkStringIfNulllOrEmpty(customerStatus)){
-                    Optional<Customer>opt = cs.findByCustomerId(customerId);
-                    customerStatus=opt.get().getCustomerStatus();
-                }if(checkStringIfNulllOrEmpty(salesId)) {
-                    Optional<Customer> opt = cs.findByCustomerId(customerId);
-                    salesId = opt.get().getSales().getSalesId();
-                }
-                int customer = cs.updateCus(customerName, dealerId, customerGender, customerNik, customerKk,
-                        customerEmail, customerAddress, customerTelp, customerHp, customerStatus, salesId, customerId);
-                return new ResponseEntity<>(new ResponseSuccess(cs.getCustomerDTO(customerId)), HttpStatus.OK);
             }
+
+            //kondisi jika kosong pada fungsi update akan mengambil data sebelumnya
+            if (checkStringIfNulllOrEmpty(customerName)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerName = opt.get().getCustomerName();
+            }  if (checkStringIfNulllOrEmpty(dealerId)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                dealerId = opt.get().getDealer().getDealerId();
+            }  if (checkStringIfNulllOrEmpty(customerGender)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerGender = opt.get().getCustomerGender();
+            }  if (checkStringIfNulllOrEmpty(customerNik)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerNik = opt.get().getCustomerNik();
+            }  if (checkStringIfNulllOrEmpty(customerKk)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerKk = opt.get().getCustomerKk();
+            }  if (checkStringIfNulllOrEmpty(customerEmail)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerEmail = opt.get().getCustomerEmail();
+            }  if (checkStringIfNulllOrEmpty(customerAddress)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerAddress = opt.get().getCustomerAddress();
+            }  if (checkStringIfNulllOrEmpty(customerTelp)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerTelp = opt.get().getCustomerTelp();
+            }  if (checkStringIfNulllOrEmpty(customerHp)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerHp = opt.get().getCustomerHp();
+            }  if (checkStringIfNulllOrEmpty(customerStatus)) {
+                Optional<Customer>opt = cs.findByCustomerId(customerId);
+                customerStatus = opt.get().getCustomerStatus();
+            }
+            if (checkStringIfNulllOrEmpty(salesId)) {
+                Optional<Customer> opt = cs.findByCustomerId(customerId);
+                salesId = opt.get().getSales().getSalesId();
+            }
+            if (!checkIfValidEmail(customerEmail) || !checkIfValidTelp2(customerTelp) || !checkIfValidTHp(customerHp)||
+                    !checkValidKkDanKtp(customerKk) || !checkValidKkDanKtp(customerNik)) {
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
+            int customer = cs.updateCus(customerName, dealerId, customerGender, customerNik, customerKk,
+                    customerEmail, customerAddress, customerTelp, customerHp, customerStatus, salesId, customerId);
+            return new ResponseEntity<>(new ResponseSuccess(cs.getCustomerDTO(customerId)), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
@@ -116,11 +120,11 @@ public class CustomerController {
         String dealerId = valueToStringOrEmpty(request, "dealerId");
         String offset_s =valueToStringOrEmpty(request, "offset");
         String limit_s =valueToStringOrEmpty(request, "limit");
-
         int offset = 0;
         int limit = CONSTANTS_MAX_LIMIT;
 
         LinkedHashMap<String,Object>ret=new LinkedHashMap<>();
+        LinkedHashMap<String,Object>ret2=new LinkedHashMap<>();
 
         if(dealerId.isEmpty()){
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
@@ -129,25 +133,27 @@ public class CustomerController {
             offset = Integer.parseInt(offset_s);
         }
 
-        if(!limit_s.isEmpty()){
+        if(!limit_s.isBlank()){
             limit = Integer.parseInt(limit_s);
             List<ListAllDTO>index = cs.listAll(dealerId,customerName,limit,offset);
             if(index.size()==0) {
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }else{
-                ret.put("status", "S");
-                ret.put("code", "201");
-                ret.put("message", "Process Success");
-                ret.put("List Customer", cs.listAll(dealerId, customerName, limit, offset));
+                ret.put("status",STATUS);
+                ret.put("code",CODE);
+                ret.put("message",MESSAGE);
+                ret2.put("List Customer",cs.listAll(dealerId, customerName, limit, offset));
+                ret.put("data", ret2);
                 ret.put("dataOfRecord", index.size());
                 return new ResponseEntity<>(ret, HttpStatus.OK);
             }
         }
         List<ListAllDTO> index = cs.listAll(dealerId,customerName,limit,offset);
-        ret.put("status","S");
-        ret.put("code","201");
-        ret.put("message","Process Success");
-        ret.put("data",cs.listAll(dealerId,customerName,limit,offset));
+        ret.put("status",STATUS);
+        ret.put("code",CODE);
+        ret.put("message",MESSAGE);
+        ret2.put("List Customer",cs.listAll(dealerId, customerName, limit, offset));
+        ret.put("data", ret2);
         ret.put("dataOfRecord",index.size());
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
@@ -158,17 +164,16 @@ public class CustomerController {
     public ResponseEntity<Object> getCustomerById(
             @PathVariable("customerId") String customerId
     ){
-        LinkedHashMap<String,Object>ret=new LinkedHashMap<>();
         Optional<Customer>opt=cs.findByCustomerId(customerId);
-        if(customerId.isEmpty()){
+        if(customerId.isEmpty()||checkStringIfNulllOrEmpty(customerId)||!opt.isPresent() ){
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
         try {
             GetCustomerById getCustomerById = cs.getCustomerById(customerId);
             return new ResponseEntity<>(new ResponseSuccess(getCustomerById), HttpStatus.OK);
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
         }
     }
-
 }

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface PpnRepository extends JpaRepository<Ppn, Long> {
+public interface PpnRepository extends JpaRepository<Ppn, String> {
     @Modifying
     @Query(value = "insert into mst_ppn (ppn_id, dealer_code, description, ppn_rate, ppn_rate_previous, " +
             "effective_start_date, effective_end_date, ppn_status)" +

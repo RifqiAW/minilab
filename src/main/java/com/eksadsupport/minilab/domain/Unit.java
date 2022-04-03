@@ -24,7 +24,7 @@ public class Unit {
 
     @Size (max = 4)
     @Column(name = "unit_quantity")
-    private String unitQuantity;
+    private int unitQuantity;
 
     @Size (max = 512)
     @Column(name = "unit_color")
@@ -35,7 +35,7 @@ public class Unit {
     private String unitStatus;
 
     @Column(name = "average_cost")
-    private String averageCost;
+    private double averageCost;
 
     public String getUnitId() {
         return unitId;
@@ -51,15 +51,6 @@ public class Unit {
 
     public void setUnitSeriesName(String unitSeriesName) {
         this.unitSeriesName = unitSeriesName;
-    }
-
-
-    public String getUnitQuantity() {
-        return unitQuantity;
-    }
-
-    public void setUnitQuantity(String unitQuantity) {
-        this.unitQuantity = unitQuantity;
     }
 
     public String getUnitColor() {
@@ -78,14 +69,6 @@ public class Unit {
         this.unitStatus = unitStatus;
     }
 
-    public String getAverageCost() {
-        return averageCost;
-    }
-
-    public void setAverageCost(String averageCost) {
-        this.averageCost = averageCost;
-    }
-
     public Dealer getDealer() {
         return dealer;
     }
@@ -94,5 +77,20 @@ public class Unit {
         this.dealer = dealer;
     }
 
+    public int getUnitQuantity() {
+        return unitQuantity;
+    }
+
+    public double getAverageCost() {
+        return averageCost;
+    }
+
+    public void setUnitQuantity(int unitQuantity) {
+        this.unitQuantity = unitQuantity;
+    }
+
+    public void setAverageCost(double averageCost) {
+        this.averageCost = averageCost;
+    }
 }
 

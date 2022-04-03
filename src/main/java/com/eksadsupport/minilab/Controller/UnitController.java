@@ -1,9 +1,11 @@
 package com.eksadsupport.minilab.Controller;
 
+import com.eksadsupport.minilab.domain.Order;
 import com.eksadsupport.minilab.domain.Unit;
 import com.eksadsupport.minilab.domain.ViewAllSales;
 import com.eksadsupport.minilab.domain.ViewAllUnit;
 import com.eksadsupport.minilab.dto.customer.ListAllDTO;
+import com.eksadsupport.minilab.dto.order.GetOrder;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
@@ -35,60 +37,101 @@ public class UnitController {
     private UnitService us;
 
     @PostMapping("/save")
-    public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload){
-        try{
-            String unitId = valueToStringOrEmpty(inputPayload, "unitId");
+    public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload) {
+        try {
+            String unitCode = valueToStringOrEmpty(inputPayload, "unitId");
             String unitSeriesName = valueToStringOrEmpty(inputPayload, "unitSeriesName");
-            String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
+            String dealerCode = valueToStringOrEmpty(inputPayload, "dealerId");
             String unitQuantity = valueToStringOrEmpty(inputPayload, "unitQuantity");
             String unitColor = valueToStringOrEmpty(inputPayload, "unitColor");
-            String unitStatus = valueToStringOrEmpty(inputPayload, "unitStatus");
+            String unitStatus = valueToStringOrEmpty(inputPayload, "unitStatus").toUpperCase(Locale.ROOT);
             String averageCost = valueToStringOrEmpty(inputPayload, "averageCost");
 
-            if(checkStringIfNulllOrEmpty(unitId)){
-                if(unitId.isEmpty()){
-                    GetUnit unit = us.saveUnit(generateId(), unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
+            if (unitCode.isEmpty() && (unitSeriesName.isEmpty() || dealerCode.isEmpty() || unitQuantity.isEmpty() ||
+                    unitColor.isEmpty() || unitStatus.isEmpty() || averageCost.isEmpty() ||
+                    Double.parseDouble(averageCost) < 0)
+            ){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
 
-                    return new ResponseEntity<>(new ResponseSuccess(unit), HttpStatus.OK);
-                }else{
-                    GetUnit unit = us.saveUnit(generateId(), unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
-                    return new ResponseEntity<>(new ResponseSuccess(unit), HttpStatus.OK);
+            if(checkStringIfNulllOrEmpty(unitCode)){
+                if(unitStatus.isEmpty()){
+                    GetUnit getUnit =
+                            us.saveUnit(generateId(),
+                            unitSeriesName,
+                            dealerCode,
+                            Integer.parseInt(unitQuantity),
+                            unitColor,
+                            unitStatus,
+                            Double.parseDouble(averageCost)
+                    );
+                    return new ResponseEntity<>(new ResponseSuccess(getUnit), HttpStatus.OK);
+                }
+                else{
+                    GetUnit getUnit = us.saveUnit(generateId(),
+                            unitSeriesName,
+                            dealerCode,
+                            Integer.parseInt(unitQuantity),
+                            unitColor,
+                            unitStatus,
+                            Double.parseDouble(averageCost)
+                    );
+                    return new ResponseEntity<>(new ResponseSuccess(getUnit), HttpStatus.OK);
                 }
             }
 
-            Optional<Unit> opt = us.findByUnitId(unitId);
+            Optional<Unit> opt = us.findByUnitId(unitCode);
 
             if(!opt.isPresent()){
                 return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }else{
-                if(unitSeriesName.isEmpty()){
-                    unitSeriesName = opt.get().getUnitSeriesName();
+                if(unitCode.isEmpty()){
+                    unitCode = opt.get().getUnitId();
                 }
-                if(dealerId.isEmpty()){
-                    dealerId = opt.get().getDealer().getDealerId();
+                if(dealerCode.isEmpty()){
+                    dealerCode = opt.get().getDealer().getDealerId();
                 }
-                if(unitQuantity.isEmpty()){
-                    unitQuantity = opt.get().getUnitQuantity();
+                if (unitQuantity.isEmpty()) {
+                        unitQuantity = opt.get().getUnitQuantity() + "";
+                    }
+                if (unitColor.isEmpty()) {
+                        unitColor = opt.get().getUnitColor();
+                    }
+                if (unitStatus.isEmpty()) {
+                        unitStatus = opt.get().getUnitStatus();
+                    }
+                if (averageCost.isEmpty()) {
+                        averageCost = opt.get().getAverageCost() + "";
+                    }
                 }
-                if(unitColor.isEmpty()){
-                    unitColor = opt.get().getUnitColor();
+                if (Double.parseDouble(averageCost) < 0
+                ) {
+                    return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
                 }
-                if(unitStatus.isEmpty()){
-                    unitStatus = opt.get().getUnitStatus();
-                }
-                if(averageCost.isEmpty()){
-                    averageCost = opt.get().getAverageCost();
-                }
+
+            if(unitStatus.isEmpty()){
+                GetUnit getUnit = us.updateUnit(
+                                unitCode,
+                                unitSeriesName,
+                                dealerCode,
+                                Integer.parseInt(unitQuantity),
+                                unitColor,
+                                unitStatus,
+                                Double.parseDouble(averageCost)
+                        );
+                return new ResponseEntity<>(new ResponseSuccess(getUnit), HttpStatus.OK);
             }
-
-
-            if(unitId.isEmpty()){
-                GetUnit unit = us.updateUnit(unitId, unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
-
-                return new ResponseEntity<>(new ResponseSuccess(unit), HttpStatus.OK);
-            }else{
-                GetUnit unit = us.updateUnit(unitId, unitSeriesName, dealerId, unitQuantity, unitColor, unitStatus, averageCost);
-                return new ResponseEntity<>(new ResponseSuccess(unit), HttpStatus.OK);
+            else{
+                GetUnit getUnit = us.updateUnit(
+                        unitCode,
+                        unitSeriesName,
+                        dealerCode,
+                        Integer.parseInt(unitQuantity),
+                        unitColor,
+                        unitStatus,
+                        Double.parseDouble(averageCost)
+                );
+                return new ResponseEntity<>(new ResponseSuccess(getUnit), HttpStatus.OK);
             }
         }
         catch (Exception e){
