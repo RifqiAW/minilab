@@ -4,10 +4,10 @@ public class ListAllUnit {
     private String unitId;
     private String unitSeriesName;
     private String dealerId;
-    private String unitQuantity;
+    private int unitQuantity;
     private String unitColor;
     private String unitStatus;
-    private String averageCost;
+    private double averageCost;
 
     public String getUnitId() {
         return unitId;
@@ -33,14 +33,6 @@ public class ListAllUnit {
         this.dealerId = dealerId;
     }
 
-    public String getUnitQuantity() {
-        return unitQuantity;
-    }
-
-    public void setUnitQuantity(String unitQuantity) {
-        this.unitQuantity = unitQuantity;
-    }
-
     public String getUnitColor() {
         return unitColor;
     }
@@ -57,11 +49,11 @@ public class ListAllUnit {
         this.unitStatus = unitStatus;
     }
 
-    public String getAverageCost() {
-        return averageCost;
+    public void setUnitQuantity(int unitQuantity) {
+        this.unitQuantity = unitQuantity;
     }
 
-    public void setAverageCost(String averageCost) {
+    public void setAverageCost(double averageCost) {
         this.averageCost = averageCost;
     }
 }
