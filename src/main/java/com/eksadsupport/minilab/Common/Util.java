@@ -64,16 +64,23 @@ public class Util {
         return false;
 
     }
-
-
     public static boolean checkIfValidTelp2(String s){
-        if(s.matches("021-[0-9]{8}")){
+        if(s.matches("^[0-9]{3}-[0-9]{8}")){
             return true;
         }
         return false;
     }
     public static boolean checkIfValidTHp(String s){
-        if(s.matches("^(\\+\\d{1,14})")){
+        if(s.matches("^(\\+628\\d{1,11}\\s*$)")){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean checkValidKkDanKtp(String s){
+        if(s.matches("^(1[1-9]|21|[37][1-6]|5[1-3]|6[1-5]|[89][12])" +
+                "\\d{2}\\d{2}([04][1-9]|[1256][0-9]|[37][01])(0[1-9]|1[0-2])\\d{2}\\d{4}$"))
+        {
             return true;
         }
         return false;
