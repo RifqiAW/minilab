@@ -159,10 +159,10 @@ public class UnitController {
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
 
-            if(!limit_s.isEmpty() || Integer.parseInt(limit_s) < 0){
+            if(!limit_s.isEmpty()){
                 limit = Integer.parseInt(limit_s);
             }
-            if(!offset_s.isEmpty() || Integer.parseInt(offset_s) < 1){
+            if(!offset_s.isEmpty()){
                 offset = Integer.parseInt(offset_s);
             }
 
