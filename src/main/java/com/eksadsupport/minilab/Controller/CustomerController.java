@@ -2,6 +2,7 @@ package com.eksadsupport.minilab.Controller;
 
 
 
+import com.eksadsupport.minilab.Common.GenerateJWT;
 import com.eksadsupport.minilab.domain.Customer;
 import com.eksadsupport.minilab.dto.customer.GetCustomerById;
 import com.eksadsupport.minilab.dto.customer.ListAllDTO;
@@ -9,6 +10,7 @@ import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
 import com.eksadsupport.minilab.service.CustomerService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -32,9 +34,11 @@ public class CustomerController {
 
     @PostMapping("/save")
     public  ResponseEntity<Object> save(
-            @RequestBody final Map<String, Object> request
+            @RequestBody final Map<String, Object> request,
+            @RequestHeader(name = "token", required = false) String token
     ) {
         try {
+            Claims claims = GenerateJWT.validateToken(token);
             String customerId = request.get("customerId").toString();
             String customerName = request.get("customerName").toString();
             String dealerId = request.get("dealerId").toString();
@@ -114,8 +118,10 @@ public class CustomerController {
 
     @PostMapping("/listAll")
     public ResponseEntity<Object> listAll(
-            @RequestBody final Map<String,Object>request
+            @RequestBody final Map<String,Object>request,
+            @RequestHeader(name = "token", required = false) String token
     ){
+        Claims claims = GenerateJWT.validateToken(token);
         String customerName = valueToStringOrEmpty(request, "customerName");
         String dealerId = valueToStringOrEmpty(request, "dealerId");
         String offset_s =valueToStringOrEmpty(request, "offset");
@@ -162,8 +168,16 @@ public class CustomerController {
 
     @GetMapping("/tes3/{customerId}")
     public ResponseEntity<Object> getCustomerById(
-            @PathVariable("customerId") String customerId
+            @PathVariable("customerId") String customerId,
+            @RequestHeader(name = "token", required = false) String token
     ){
+        try{
+            Claims claims = GenerateJWT.validateToken(token);
+        }catch (Exception ex){
+            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+        }
+
+
         Optional<Customer>opt=cs.findByCustomerId(customerId);
         if(customerId.isEmpty()||checkStringIfNulllOrEmpty(customerId)||!opt.isPresent() ){
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
