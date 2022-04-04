@@ -42,7 +42,7 @@ public class Util {
 
     public static String generateId(){
         return LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyyMMddhh24mmssSSSSS"));
+                .format(DateTimeFormatter.ofPattern("yyyyMMddHH24mmssSSSSS"));
     }
 
     public static String generateQueryDate(){
@@ -52,7 +52,7 @@ public class Util {
 
     public static boolean isValidId(String dateStr) {
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddhh24mmssSSSSS");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHH24mmssSSSSS");
             dateFormatter.parse(dateStr);
         }
         catch (DateTimeParseException e) {

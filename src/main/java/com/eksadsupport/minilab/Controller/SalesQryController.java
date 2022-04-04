@@ -27,7 +27,7 @@ import java.util.*;
 import static com.eksadsupport.minilab.Common.Util.*;
 
 @RestController
-@RequestMapping("ddms/v1/cmd/master/sales")
+@RequestMapping("ddms/v1/qry/master/sales")
 public class SalesQryController {
 
     @Autowired

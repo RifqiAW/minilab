@@ -22,7 +22,7 @@ import java.util.*;
 import static com.eksadsupport.minilab.Common.Util.*;
 
 @RestController
-@RequestMapping("ddms/v1/cmd/transcation/order")
+@RequestMapping("ddms/v1/cmd/transaction/order")
 public class OrderCmdController {
 
     @Autowired
