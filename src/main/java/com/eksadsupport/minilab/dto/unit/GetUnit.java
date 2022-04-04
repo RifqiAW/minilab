@@ -20,6 +20,14 @@ public class GetUnit {
         this.averageCost = averageCost;
     }
 
+    public int getUnitQuantity() {
+        return unitQuantity;
+    }
+
+    public double getAverageCost() {
+        return averageCost;
+    }
+
     public String getUnitId() {
         return unitId;
     }
