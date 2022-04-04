@@ -1,8 +1,10 @@
 package com.eksadsupport.minilab.Controller;
 
 import com.eksadsupport.minilab.domain.Ppn;
+import com.eksadsupport.minilab.dto.ppn.GetActivePpn;
 import com.eksadsupport.minilab.dto.ppn.GetPpn;
 import com.eksadsupport.minilab.dto.ppn.PpnList;
+import com.eksadsupport.minilab.dto.response.Response;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
@@ -141,6 +143,8 @@ public class PpnController {
             offset = Integer.parseInt(offset_s);
         }
 
+
+
         Map<String, Object> map = new LinkedHashMap<>();
         List<PpnList> index = ppnService.listAll(dealerId,ppnStatus,limit,offset);
         map.put("status","S");
@@ -174,28 +178,44 @@ public class PpnController {
         String dealerId = request.get("dealerId").toString();
         String queryDate = request.get("queryDate").toString();
 
-        Optional<Ppn> opt = ppnService.findDealerById(dealerId);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date queryDates;
 
-        if (dealerId.isEmpty()){
-            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-        }
+        if (queryDate.equalsIgnoreCase("") || queryDate == null){
 
-        try {
-            if (dealerId.equals(opt)){
-                if (queryDate.isEmpty()){
+            Map<String, Object> map = new LinkedHashMap<>();
+            List<PpnList> data = ppnService.listAllByDealer(dealerId);
+            map.put("QueryDate", generateQueryDate());
+            map.put("data",ppnService.listAllByDealer(dealerId));
+            return new ResponseEntity<>(map, HttpStatus.OK);
+        }else {
+            queryDates = sdf.parse(queryDate);
+            Optional<Ppn> cek = ppnService.findActivePpn(dealerId, queryDates);
 
-                    return new ResponseEntity<>("queryDate", HttpStatus.OK);
-                }else {
-                    PpnList ppnList = ppnService.getDealerById(dealerId, queryDate);
-                    return new ResponseEntity<>(new ResponseSuccess(ppnList), HttpStatus.OK);
-                }
+            if (!cek.isPresent()){
+                String res = "Data Tidak Valid";
+                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }else {
+                Optional<Ppn> opt = ppnService.findActivePpn(dealerId, queryDates);
 
-                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
+                GetActivePpn getActivePpn = new GetActivePpn();
+                getActivePpn.setId(opt.get().getPpnId());
+                getActivePpn.setDealerId(opt.get().getDealer().getDealerId());
+                getActivePpn.setPpnDescription(opt.get().getDescription());
+                getActivePpn.setPpnRate(opt.get().getPpnRate());
+                getActivePpn.setPpnRatePrevious(opt.get().getPpnRatePrevious());
+                getActivePpn.setEffectiveStartDate(opt.get().getEffectiveStartDate());
+                getActivePpn.setEffectiveEndDate(opt.get().getEffectiveEndDate());
+                getActivePpn.setStatus(opt.get().getPpnStatus());
+
+                Response response = new Response();
+                response.setStatus("S");
+                response.setCode("201");
+                response.setMessage("Processed Successed");
+                response.setData(getActivePpn);
+
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
-        } catch (Exception e){
-            return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
         }
-
     }
 }
