@@ -90,12 +90,12 @@ public class PpnService {
         return dealId;
     }
 
-    public String cekPPnIdBydealer(String dealerId){
-        return ppnRepository.cekPPnIdBydealer(dealerId);
-    }
+    public Optional<Ppn>findActivePpn(String dealerId, Date queryDate){
 
-    public Optional<Ppn> findDealerById(String dealerId){
-        return ppnRepository.findDealerIdBy(dealerId);
+
+        Optional<Ppn> getActivePpn = ppnRepository.findActivePpn(dealerId, queryDate);
+
+        return getActivePpn;
     }
 
     public Optional<Ppn> findByPpnId(String ppnId){

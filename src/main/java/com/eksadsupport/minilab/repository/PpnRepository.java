@@ -61,21 +61,13 @@ public interface PpnRepository extends JpaRepository<Ppn, String> {
     @Query(value = "select ppn_status from mst_ppn where ppn_id= ?1",nativeQuery = true)
     String cekPpnStatus(String ppnId);
 
-    @Transactional
-    @Query(value = "select dealer_code from mst_ppn where dealer_code = ?1 " +
-            "and effective_start_date = ?2 " +
-            "and ppn_status='ACTIVE' LIMIT 1", nativeQuery = true)
-    Optional<Ppn> findActivePpn(String dealerId, Date queryDate);
-
-    @Query(value = "select ppn_id from mst_ppn where dealer_code = ?1", nativeQuery = true)
-    String cekPPnIdBydealer (String dealerId);
+    @Query(value = "select * from mst_ppn where dealer_code = :dealerId and effective_start_date >= :queryDate limit 1",nativeQuery = true)
+    Optional<Ppn>findActivePpn(String dealerId, Date queryDate);
 
     @Query(value = "select * from mst_ppn where dealer_code = ?1 " +
             "and effective_start_date>=?2::timestamp ", nativeQuery = true)
     Optional<Ppn> findByDealerId (String dealerId, String querydate);
 
-    @Query(value = "select * from mst_ppn where dealer_code = ?1", nativeQuery = true)
-    Optional<Ppn> findDealerIdBy (String dealerId);
 
     @Transactional
     @Query(value = "SELECT * FROM mst_ppn where dealer_code =?1",nativeQuery = true)
