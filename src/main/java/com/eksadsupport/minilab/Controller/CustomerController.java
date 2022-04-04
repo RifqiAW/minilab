@@ -37,11 +37,11 @@ public class CustomerController {
 
     @PostMapping("/save")
     public  ResponseEntity<Object> save(
-            @RequestBody final Map<String, Object> inputPayload,
-            @RequestHeader(name = "token", required = false) String token
+            @RequestBody final Map<String, Object> inputPayload
+//            @RequestHeader(name = "token", required = false) String token
     ) {
         try {
-            Claims claims = GenerateJWT.validateToken(token);
+//            Claims claims = GenerateJWT.validateToken(token);
             String customerId = valueToStringOrEmpty(inputPayload, "customerId");
             String customerName = valueToStringOrEmpty(inputPayload, "customerName");
             String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
@@ -125,11 +125,11 @@ public class CustomerController {
 
     @PostMapping("/listAll")
     public ResponseEntity<Object> listAll(
-            @RequestBody final Map<String,Object>request,
-            @RequestHeader(name = "token", required = false) String token
+            @RequestBody final Map<String,Object>request
+//            @RequestHeader(name = "token", required = false) String token
     ) {
         try {
-            Claims claims = GenerateJWT.validateToken(token);
+//            Claims claims = GenerateJWT.validateToken(token);
             String customerName = valueToStringOrEmpty(request, "customerName");
             String dealerId = valueToStringOrEmpty(request, "dealerId");
             String offset_s = valueToStringOrEmpty(request, "offset");
@@ -184,11 +184,11 @@ public class CustomerController {
 
     @GetMapping("/get/{customerId}")
     public ResponseEntity<Object> getCustomerById(
-            @PathVariable("customerId") String customerId,
-            @RequestHeader(name = "token", required = false) String token
+            @PathVariable("customerId") String customerId
+//            @RequestHeader(name = "token", required = false) String token
     ){
         try{
-            Claims claims = GenerateJWT.validateToken(token);
+//            Claims claims = GenerateJWT.validateToken(token);
             Optional<Customer>opt=cs.findByCustomerId(customerId);
             if(customerId.isEmpty()||checkStringIfNulllOrEmpty(customerId)||!opt.isPresent() ){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
