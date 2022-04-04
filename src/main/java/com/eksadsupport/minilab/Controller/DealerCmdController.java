@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("ddms/v1/cmd/master/dealer")
-public class DealerControllerCmd {
+public class DealerCmdController {
 
     @Autowired
     DealerService ds;

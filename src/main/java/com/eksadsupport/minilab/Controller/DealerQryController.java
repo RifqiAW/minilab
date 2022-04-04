@@ -16,7 +16,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("ddms/v1/qry/master/dealer")
-public class DealerControllerQry {
+public class DealerQryController {
 
     @Autowired
     DealerService ds;
