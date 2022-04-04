@@ -98,7 +98,7 @@ public class CustomerService {
 
     public GetCustomerById getCustomerById(String customerId) {
         GetCustomerById cusById = new GetCustomerById();
-        Optional<Customer> opt = cr.findById(customerId);
+        Optional<Customer>opt = cr.findById(customerId);
         cusById.setCustomerId(opt.get().getCustomerId());
         cusById.setCustomerNama(opt.get().getCustomerName());
         cusById.setDealerId(opt.get().getDealer().getDealerId());
@@ -112,8 +112,11 @@ public class CustomerService {
 
 
     }
-
-    public Optional<Customer> findByCustomerId(String customerId) {
+    public Optional<Customer> findByCustomerId(String customerId){
         return cr.findById(customerId);
+    }
+
+    public Optional<Customer> getCustomerByIdV3(String customerId){
+        return  cr.getCustomerByIdV3(customerId);
     }
 }
