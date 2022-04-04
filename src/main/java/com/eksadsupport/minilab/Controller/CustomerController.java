@@ -133,7 +133,7 @@ public class CustomerController {
             offset = Integer.parseInt(offset_s);
         }
 
-        if(!limit_s.isBlank()){
+        if(!limit_s.isEmpty()){
             limit = Integer.parseInt(limit_s);
             List<ListAllDTO>index = cs.listAll(dealerId,customerName,limit,offset);
             if(index.size()==0) {
