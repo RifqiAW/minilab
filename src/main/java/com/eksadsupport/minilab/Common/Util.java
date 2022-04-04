@@ -45,6 +45,11 @@ public class Util {
                 .format(DateTimeFormatter.ofPattern("yyyyMMddhh24mmssSSSSS"));
     }
 
+    public static String generateQueryDate(){
+        return LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh24:mm"));
+    }
+
     public static boolean isValidId(String dateStr) {
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddhh24mmssSSSSS");
