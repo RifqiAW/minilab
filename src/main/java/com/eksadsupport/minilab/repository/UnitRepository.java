@@ -24,7 +24,7 @@ public interface UnitRepository extends JpaRepository<Unit, String>, JpaSpecific
 
 
     @Modifying
-    @Query(value = "update mst_unit set unit_series_name = ?2, dealer_id = ?3, unit_quantity = ?4, unit_color = ?5, unit_status = ?6, average_cost = ?7 where unit_id = ?1", nativeQuery = true)
+    @Query(value = "update mst_unit set unit_series_name = ?2, dealer_code = ?3, unit_quantity = ?4, unit_color = ?5, unit_status = ?6, average_cost = ?7 where unit_id = ?1", nativeQuery = true)
     @Transactional
     void update(String unitId, String unitSeriesName, String dealerId, int unitQuantity, String unitColor, String unitStatus, double averageCost);
 

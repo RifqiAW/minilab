@@ -39,7 +39,7 @@ public class UnitController {
     @PostMapping("/save")
     public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload) {
         try {
-            String unitCode = valueToStringOrEmpty(inputPayload, "unitId");
+            String unitCode = valueToStringOrEmpty(inputPayload, "unitCode");
             String unitSeriesName = valueToStringOrEmpty(inputPayload, "unitSeriesName");
             String dealerCode = valueToStringOrEmpty(inputPayload, "dealerId");
             String unitQuantity = valueToStringOrEmpty(inputPayload, "unitQuantity");
@@ -47,9 +47,9 @@ public class UnitController {
             String unitStatus = valueToStringOrEmpty(inputPayload, "unitStatus").toUpperCase(Locale.ROOT);
             String averageCost = valueToStringOrEmpty(inputPayload, "averageCost");
 
-            if (unitCode.isEmpty() && (unitSeriesName.isEmpty() || dealerCode.isEmpty() || unitQuantity.isEmpty() ||
+            if (unitCode.isEmpty() && ((unitSeriesName.isEmpty() || dealerCode.isEmpty() || unitQuantity.isEmpty() ||
                     unitColor.isEmpty() || unitStatus.isEmpty() || averageCost.isEmpty() ||
-                    Double.parseDouble(averageCost) < 0)
+                    Double.parseDouble(averageCost) < 0))
             ){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
@@ -85,8 +85,11 @@ public class UnitController {
             if(!opt.isPresent()){
                 return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }else{
-                if(unitCode.isEmpty()){
-                    unitCode = opt.get().getUnitId();
+//                if(unitCode.isEmpty()){
+//                    unitCode = opt.get().getUnitId();
+//                }
+                if(unitSeriesName.isEmpty()){
+                    unitSeriesName = opt.get().getUnitSeriesName();
                 }
                 if(dealerCode.isEmpty()){
                     dealerCode = opt.get().getDealer().getDealerId();
@@ -104,8 +107,7 @@ public class UnitController {
                         averageCost = opt.get().getAverageCost() + "";
                     }
                 }
-                if (Double.parseDouble(averageCost) < 0
-                ) {
+                if (Double.parseDouble(averageCost) < 0) {
                     return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
                 }
 
