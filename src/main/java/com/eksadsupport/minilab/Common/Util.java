@@ -47,7 +47,7 @@ public class Util {
 
     public static String generateQueryDate(){
         return LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh24:mm"));
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public static boolean isValidId(String dateStr) {
