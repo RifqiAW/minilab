@@ -174,32 +174,28 @@ public class PpnController {
         String dealerId = request.get("dealerId").toString();
         String queryDate = request.get("queryDate").toString();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        Date querydates = sdf.parse(queryDate);
-
-        String ppid = ppnService.cekPPnIdBydealer(dealerId);
-        PpnList opt = ppnService.getActivePpn(dealerId, querydates);
-
-        System.out.println(dealerId);
-        System.out.println(opt);
+        Optional<Ppn> opt = ppnService.findDealerById(dealerId);
 
         if (dealerId.isEmpty()){
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
 
         try {
-            if (queryDate.isEmpty()){
-                Map<String, Object> map = new LinkedHashMap<>();
-                map.put("queryDate", generateQueryDate());
-                map.put("data", ppnService.listAllByDealer(dealerId));
+            if (dealerId.equals(opt)){
+                if (queryDate.isEmpty()){
 
-                return new ResponseEntity<>(map, HttpStatus.OK);
+                    return new ResponseEntity<>("queryDate", HttpStatus.OK);
+                }else {
+                    PpnList ppnList = ppnService.getDealerById(dealerId, queryDate);
+                    return new ResponseEntity<>(new ResponseSuccess(ppnList), HttpStatus.OK);
+                }
             }else {
-                PpnList ppnList= ppnService.getActivePpn(dealerId, querydates);
-                return new ResponseEntity<>(new ResponseSuccess(ppnList), HttpStatus.OK);
+
+                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
             }
-        }catch (Exception e){
+        } catch (Exception e){
             return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
         }
+
     }
 }

@@ -74,10 +74,9 @@ public class PpnService {
         return ppnById;
     }
 
-    public PpnList getActivePpn(String dealerId, Date queryDate) {
+    public PpnList getDealerById(String dealerId, String queryDate) {
         PpnList dealId = new PpnList();
-
-        Optional<Ppn> opt = ppnRepository.findActivePpn(dealerId, queryDate);
+        Optional<Ppn> opt = ppnRepository.findByDealerId(dealerId, queryDate);
 
         dealId.setPpnId(opt.get().getPpnId());
         dealId.setDealerId(opt.get().getDealer().getDealerId());
@@ -93,6 +92,14 @@ public class PpnService {
 
     public String cekPPnIdBydealer(String dealerId){
         return ppnRepository.cekPPnIdBydealer(dealerId);
+    }
+
+    public Optional<Ppn> findDealerById(String dealerId){
+        return ppnRepository.findDealerIdBy(dealerId);
+    }
+
+    public Optional<Ppn> findByPpnId(String ppnId){
+        return ppnRepository.findByPpnId(ppnId);
     }
 
     public String cekPpnId(String ppnId){
@@ -141,8 +148,6 @@ public class PpnService {
         return listAll;
     }
 
-    public Optional<Ppn> findByPpnId(String ppnId){
-        return ppnRepository.findByPpnId(ppnId);
-    }
+
 
 }

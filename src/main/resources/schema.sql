@@ -33,3 +33,6 @@ CREATE VIEW vw_mst_unit AS select * from mst_unit
 CREATE TABLE IF NOT EXISTS trx_order(order_id VARCHAR(50) NOT NULL, unit_id VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, sales_id VARCHAR(50) NOT NULL, customer_id VARCHAR(50) NOT NULL, minimum_payment DOUBLE PRECISION NOT NULL, total_value DOUBLE PRECISION NOT NULL, order_value DOUBLE PRECISION NOT NULL, offtheroad_value DOUBLE PRECISION NOT NULL, order_total_discount DOUBLE PRECISION NOT NULL, ppn DOUBLE PRECISION NOT NULL, plat_nomor VARCHAR(50), nomor_mesin VARCHAR(50), nomor_rangka VARCHAR(50), is_leasing VARCHAR(10) CHECK(is_leasing IS NULL OR is_leasing IN ('YES', 'NO')), payment_status VARCHAR(50) NOT NULL CHECK(payment_status IN ('FULLY_PAID', 'NOT_PAID', 'PARTIAL_PAID')), unit_status VARCHAR(50) NOT NULL CHECK(unit_status IN ('IN_STOCK', 'INDENT_PROCESS', 'UNIT_RECEIVED', 'READY_FOR_DELIVERY', 'RECEIPT_BY_CUSTOMER')), PRIMARY KEY (order_id), FOREIGN KEY (unit_id) REFERENCES mst_unit(unit_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code), FOREIGN KEY (sales_id) REFERENCES mst_sales(sales_id), FOREIGN KEY (customer_id) REFERENCES mst_customer(customer_id))
 
 CREATE VIEW vw_trx_order AS select * from trx_order
+
+
+alter table mst_ppn alter column effective_start_date set default now()
