@@ -9,8 +9,11 @@ import com.eksadsupport.minilab.dto.customer.ListAllDTO;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
 import com.eksadsupport.minilab.dto.response.ResponseNoContent;
 import com.eksadsupport.minilab.dto.response.ResponseSuccess;
+import com.eksadsupport.minilab.dto.response.ResponseUnauthorized;
 import com.eksadsupport.minilab.service.CustomerService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -34,23 +37,23 @@ public class CustomerController {
 
     @PostMapping("/save")
     public  ResponseEntity<Object> save(
-            @RequestBody final Map<String, Object> request,
+            @RequestBody final Map<String, Object> inputPayload,
             @RequestHeader(name = "token", required = false) String token
     ) {
         try {
             Claims claims = GenerateJWT.validateToken(token);
-            String customerId = request.get("customerId").toString();
-            String customerName = request.get("customerName").toString();
-            String dealerId = request.get("dealerId").toString();
-            String customerGender = request.get("customerGender").toString();
-            String customerNik = request.get("customerNik").toString();
-            String customerKk = request.get("customerKk").toString();
-            String customerEmail = request.get("customerEmail").toString();
-            String customerAddress = request.get("customerAddress").toString();
-            String customerTelp = request.get("customerTelp").toString();
-            String customerHp = request.get("customerHp").toString();
-            String customerStatus = request.get("customerStatus").toString();
-            String salesId = request.get("salesId").toString();
+            String customerId = valueToStringOrEmpty(inputPayload, "customerId");
+            String customerName = valueToStringOrEmpty(inputPayload, "customerName");
+            String dealerId = valueToStringOrEmpty(inputPayload, "dealerId");
+            String customerGender = valueToStringOrEmpty(inputPayload, "customerGender");
+            String customerNik = valueToStringOrEmpty(inputPayload, "customerNik");
+            String customerKk = valueToStringOrEmpty(inputPayload, "customerKk");
+            String customerEmail = valueToStringOrEmpty(inputPayload, "customerEmail");
+            String customerAddress = valueToStringOrEmpty(inputPayload, "customerAddress");
+            String customerTelp = valueToStringOrEmpty(inputPayload, "customerTelp");
+            String customerHp = valueToStringOrEmpty(inputPayload, "customerHp");
+            String customerStatus = valueToStringOrEmpty(inputPayload, "customerStatus");
+            String salesId = valueToStringOrEmpty(inputPayload, "salesId");
 
 
             if (checkStringIfNulllOrEmpty(customerId)) {
@@ -107,9 +110,13 @@ public class CustomerController {
             int customer = cs.updateCus(customerName, dealerId, customerGender, customerNik, customerKk,
                     customerEmail, customerAddress, customerTelp, customerHp, customerStatus, salesId, customerId);
             return new ResponseEntity<>(new ResponseSuccess(cs.getCustomerDTO(customerId)), HttpStatus.OK);
+        }  catch (SignatureException ex) {
+        return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        } catch (ExpiredJwtException expired) {
+        return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+        e.printStackTrace();
+        return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -120,74 +127,86 @@ public class CustomerController {
     public ResponseEntity<Object> listAll(
             @RequestBody final Map<String,Object>request,
             @RequestHeader(name = "token", required = false) String token
-    ){
-        Claims claims = GenerateJWT.validateToken(token);
-        String customerName = valueToStringOrEmpty(request, "customerName");
-        String dealerId = valueToStringOrEmpty(request, "dealerId");
-        String offset_s =valueToStringOrEmpty(request, "offset");
-        String limit_s =valueToStringOrEmpty(request, "limit");
-        int offset = 0;
-        int limit = CONSTANTS_MAX_LIMIT;
+    ) {
+        try {
+            Claims claims = GenerateJWT.validateToken(token);
+            String customerName = valueToStringOrEmpty(request, "customerName");
+            String dealerId = valueToStringOrEmpty(request, "dealerId");
+            String offset_s = valueToStringOrEmpty(request, "offset");
+            String limit_s = valueToStringOrEmpty(request, "limit");
+            int offset = 0;
+            int limit = CONSTANTS_MAX_LIMIT;
 
-        LinkedHashMap<String,Object>ret=new LinkedHashMap<>();
-        LinkedHashMap<String,Object>ret2=new LinkedHashMap<>();
+            LinkedHashMap<String, Object> ret = new LinkedHashMap<>();
+            LinkedHashMap<String, Object> ret2 = new LinkedHashMap<>();
 
-        if(dealerId.isEmpty()){
+            if (dealerId.isEmpty()) {
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
+            if (!offset_s.isEmpty()) {
+                offset = Integer.parseInt(offset_s);
+            }
+
+            if (!limit_s.isEmpty()) {
+                limit = Integer.parseInt(limit_s);
+                List<ListAllDTO> index = cs.listAll(dealerId, customerName, limit, offset);
+                if (index.size() == 0) {
+                    return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+                } else {
+                    ret.put("status", STATUS);
+                    ret.put("code", CODE);
+                    ret.put("message", MESSAGE);
+                    ret2.put("List Customer", cs.listAll(dealerId, customerName, limit, offset));
+                    ret.put("data", ret2);
+                    ret.put("dataOfRecord", index.size());
+                    return new ResponseEntity<>(ret, HttpStatus.OK);
+                }
+            }
+            List<ListAllDTO> index = cs.listAll(dealerId, customerName, limit, offset);
+            ret.put("status", STATUS);
+            ret.put("code", CODE);
+            ret.put("message", MESSAGE);
+            ret2.put("List Customer", cs.listAll(dealerId, customerName, limit, offset));
+            ret.put("data", ret2);
+            ret.put("dataOfRecord", index.size());
+            return new ResponseEntity<>(ret, HttpStatus.OK);
+        }catch (SignatureException ex) {
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        } catch (ExpiredJwtException expired) {
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
-        if(!offset_s.isEmpty()){
-            offset = Integer.parseInt(offset_s);
-        }
-
-        if(!limit_s.isEmpty()){
-            limit = Integer.parseInt(limit_s);
-            List<ListAllDTO>index = cs.listAll(dealerId,customerName,limit,offset);
-            if(index.size()==0) {
-                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-            }else{
-                ret.put("status",STATUS);
-                ret.put("code",CODE);
-                ret.put("message",MESSAGE);
-                ret2.put("List Customer",cs.listAll(dealerId, customerName, limit, offset));
-                ret.put("data", ret2);
-                ret.put("dataOfRecord", index.size());
-                return new ResponseEntity<>(ret, HttpStatus.OK);
-            }
-        }
-        List<ListAllDTO> index = cs.listAll(dealerId,customerName,limit,offset);
-        ret.put("status",STATUS);
-        ret.put("code",CODE);
-        ret.put("message",MESSAGE);
-        ret2.put("List Customer",cs.listAll(dealerId, customerName, limit, offset));
-        ret.put("data", ret2);
-        ret.put("dataOfRecord",index.size());
-        return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
 
 
-    @GetMapping("/tes3/{customerId}")
+    @GetMapping("/get/{customerId}")
     public ResponseEntity<Object> getCustomerById(
             @PathVariable("customerId") String customerId,
             @RequestHeader(name = "token", required = false) String token
     ){
         try{
             Claims claims = GenerateJWT.validateToken(token);
-        }catch (Exception ex){
-            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-        }
-
-
-        Optional<Customer>opt=cs.findByCustomerId(customerId);
-        if(customerId.isEmpty()||checkStringIfNulllOrEmpty(customerId)||!opt.isPresent() ){
-            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
-        }
-        try {
-            GetCustomerById getCustomerById = cs.getCustomerById(customerId);
-            return new ResponseEntity<>(new ResponseSuccess(getCustomerById), HttpStatus.OK);
-        }catch (Exception e){
+            Optional<Customer>opt=cs.findByCustomerId(customerId);
+            if(customerId.isEmpty()||checkStringIfNulllOrEmpty(customerId)||!opt.isPresent() ){
+                return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+            }
+            try {
+                GetCustomerById getCustomerById = cs.getCustomerById(customerId);
+                return new ResponseEntity<>(new ResponseSuccess(getCustomerById), HttpStatus.OK);
+                }catch (Exception e){
+                e.printStackTrace();
+                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
+                }
+        } catch (SignatureException ex) {
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        } catch (ExpiredJwtException expired) {
+            return new ResponseEntity<>(new ResponseUnauthorized(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
     }
 }
