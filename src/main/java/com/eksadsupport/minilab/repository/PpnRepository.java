@@ -1,9 +1,6 @@
 package com.eksadsupport.minilab.repository;
 
 import com.eksadsupport.minilab.domain.Ppn;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -62,7 +59,7 @@ public interface PpnRepository extends JpaRepository<Ppn, String> {
     String cekPpnStatus(String ppnId);
 
     @Query(value = "select * from mst_ppn where dealer_code = :dealerId and effective_start_date >= :queryDate limit 1",nativeQuery = true)
-    Optional<Ppn>findActivePpn(String dealerId, Date queryDate);
+    Optional<Ppn> findActivePpn(String dealerId, Date queryDate);
 
     @Query(value = "select * from mst_ppn where dealer_code = ?1 " +
             "and effective_start_date>=?2::timestamp ", nativeQuery = true)

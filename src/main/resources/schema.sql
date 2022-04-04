@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS mst_dealer CASCADE
 DROP VIEW IF EXISTS vw_mst_dealer CASCADE
 DROP VIEW IF EXISTS vw_trx_order CASCADE
 DROP TABLE IF EXISTS mst_ppn CASCADE
+DROP TABLE IF EXISTS vw_mst_ppn CASCADE
 DROP TABLE IF EXISTS mst_customer CASCADE
 DROP TABLE IF EXISTS mst_unit CASCADE
 DROP TABLE IF EXISTS vw_mst_unit CASCADE
@@ -21,6 +22,8 @@ CREATE VIEW vw_mst_sales AS select * from mst_sales
 --CREATE VIEW vw_mst_sales AS select sales_id as sales_id, sales_name as salesName, dealer_code as dealerCode, supervisor_id as supervisorId, sales_gender as salesGender, sales_email as salesEmail, sales_status as salesStatus from mst_sales
 
 CREATE TABLE IF NOT EXISTS mst_ppn(ppn_id VARCHAR(50) NOT NULL, Description VARCHAR(255) NOT NULL, dealer_code VARCHAR(50) NOT NULL, effective_start_date TIMESTAMP NOT NULL, effective_end_date TIMESTAMP, ppn_rate DOUBLE PRECISION NOT NULL, ppn_rate_previous DOUBLE PRECISION, ppn_status VARCHAR(10) NOT NULL CHECK(ppn_status IN ('ACTIVE', 'INACTIVE')), PRIMARY KEY (ppn_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code))
+
+CREATE VIEW vw_mst_ppn AS select * from mst_ppn
 
 CREATE TABLE IF NOT EXISTS mst_customer(customer_id VARCHAR(50) NOT NULL, customer_address VARCHAR(512) NOT NULL, customer_email VARCHAR(255), customer_gender VARCHAR(4) NOT NULL CHECK(customer_gender IN ('GTLK', 'GTPR')), customer_hp_number VARCHAR(255), customer_kk VARCHAR(50) NOT NULL, customer_name VARCHAR(255) NOT NULL, customer_nik VARCHAR(50) NOT NULL, customer_status VARCHAR(10) NOT NULL CHECK(customer_status IN ('ACTIVE', 'INACTIVE')), customer_telp_number VARCHAR(50), sales_id VARCHAR(50) NOT NULL, dealer_code VARCHAR(50) NOT NULL, PRIMARY KEY (customer_id), FOREIGN KEY (dealer_code) REFERENCES mst_dealer(dealer_code), FOREIGN KEY (sales_id) REFERENCES mst_sales(sales_id))
 
