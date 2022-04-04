@@ -32,13 +32,30 @@ public interface DealerRepository extends JpaRepository<Dealer,String > {
     @Query(value = "select * from public.mst_dealer where mst_dealer.dealer_code like %:dealerId% and mst_dealer.dealer_status =:dealerStatus and mst_dealer.dealer_name like %:dealerName% limit :limit offset :offset" ,nativeQuery = true)
     List<Dealer> SelectDealer(String dealerId, String dealerStatus, String dealerName, int limit, int offset);
 
-    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and LOWER(dealer_status) =:dealerStatus and dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and dealer_status =:dealerStatus and dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
     List<Dealer> ViewDealer(String dealerId,String dealerStatus,String dealerName,int limit, int offset);
 
-    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% or LOWER(dealer_status)=:dealerStatus or dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% or dealer_status=:dealerStatus or dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
     List<Dealer> ViewDealer2(String dealerId,String dealerStatus,String dealerName,int limit, int offset);
 
-    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and dealer_status =:dealerStatus and dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% or dealer_status=:dealerStatus ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    List<Dealer> ViewDealer3(String dealerId,String dealerStatus,int limit, int offset);
+
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    List<Dealer> ViewDealer4(String dealerId,String dealerName,int limit, int offset);
+
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% and dealer_status=:dealerStatus ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    List<Dealer> ViewDealer5(String dealerId,String dealerStatus,int limit, int offset);
+
+    @Query(value = "select * from vw_mst_dealer where dealer_status=:dealerStatus and dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    List<Dealer> ViewDealer6(String dealerStatus,String dealerName,int limit, int offset);
+
+    @Query(value = "select * from vw_mst_dealer where dealer_name like %:dealerName% ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
+    List<Dealer> ViewDealer7(String dealerName,int limit, int offset);
+
+    @Query(value = "select * from vw_mst_dealer where dealer_code like %:dealerId% " +
+            "and dealer_status =:dealerStatus and dealer_name like %:dealerName% " +
+            "ORDER BY dealer_code ASC limit :limit offset :offset" ,nativeQuery = true)
     Page<Dealer> ListAllDealer(String dealerId, String dealerStatus, String dealerName, Pageable pageable);
 
     @Query(value = "select * from vw_mst_dealer where dealer_code=:dealerId",nativeQuery = true)
@@ -67,5 +84,7 @@ public interface DealerRepository extends JpaRepository<Dealer,String > {
     @Query(value = "select dealer_code from vw_mst_dealer where dealer_code=:dealerId",nativeQuery = true)
     Optional<Dealer> findCodeById(String dealerId);
 
+    @Query(value = "select dealer_code from mst_dealer order by dealer_code desc limit 1",nativeQuery = true)
+    int GenerateId();
 }
 

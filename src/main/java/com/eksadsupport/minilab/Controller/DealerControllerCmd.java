@@ -24,8 +24,8 @@ public class DealerControllerCmd {
     @Autowired
     DealerService ds;
 
-    @PostMapping("save")
-    public ResponseEntity<Object>saveAll(
+    @PostMapping("/save")
+    public ResponseEntity<Object> saveAll(
             @RequestBody Map<String,Object> request
     ){
         ResponseSave responseSave = new ResponseSave();
@@ -41,58 +41,48 @@ public class DealerControllerCmd {
             String class1 = "H23"; String class2 = "H123";
             String status1 = "ACTIVE"; String status2="INACTIVE";
             String blank = "";
-            try {
-
-                //FITUR INSERT
-                if (dealerId.isEmpty()) {
-                    responseSave.responseNoContent();
-                    return new ResponseEntity<>(responseSave, HttpStatus.BAD_REQUEST);
-                } else {
-                    if (dealerClass.equals(class1)||dealerClass.equals(class2)||dealerClass.equals(blank)) {
-                        if(dealerStatus.equals(status1)||dealerStatus.equals(status2)||dealerStatus.equals(blank)) {
-                            if (Util.checkIfValidTelp(telpNumber)) {
-                                int insertDealer = ds.getCreate(dealerId, dealerName, dealerClass, telpNumber, alamat, dealerExtCode, dealerStatus);
-                                Optional<Dealer> dealerList = ds.findbyID(dealerId);
-                                responseSave.responseSuccess(dealerList);
-                                return new ResponseEntity<>(responseSave, HttpStatus.OK);
-                            }
+            //String cek_id = ds.cekIdDealer(dealerId);
+            //FITUR INSERT
+            if(CheckUtils.isNullOrEmpty(dealerId)) {
+                if (dealerClass.equals(class1) || dealerClass.equals(class2) || dealerClass.equals(blank)) {
+                    if (dealerStatus.equalsIgnoreCase(status1) || dealerStatus.equalsIgnoreCase(status2) || dealerStatus.equals(blank)) {
+                        if (Util.checkIfValidTelp(telpNumber) || telpNumber.equals(blank)) {
+                            int generat = ds.codeGenerate();
+                            int insertDealer = ds.getCreate(String.valueOf(generat + 1), dealerName, dealerClass, telpNumber, alamat, dealerExtCode, dealerStatus);
+                            //Optional<Dealer> dealerList = ds.findbyID(dealerId);
+                            Optional<Dealer> dealerList = ds.findbyID(String.valueOf(generat+1));
+                            responseSave.responseSuccess(dealerList);
+                            return new ResponseEntity<>(responseSave, HttpStatus.OK);
                         }
                     }
                 }
-            }catch (Exception es){
-
-                // FITUR UPDATE
-                String cek_id = ds.cekIdDealer(dealerId);
-
-                if(cek_id.equals(dealerId)) {
-
-                    if(CheckUtils.isNullOrEmpty(dealerClass)){
-                        String deal_class = ds.cekClassDealer(dealerId);
-                        dealerClass = deal_class;
-                    }
-                    if(CheckUtils.isNullOrEmpty(telpNumber)){
-                        String telp = ds.cekTelpDealer(dealerId);
-                        telpNumber = telp;
-
-                    }if(CheckUtils.isNullOrEmpty(alamat)){
-                        String al = ds.cekAlamatDealer(dealerId);
-                        alamat = al;
-
-                    } if(CheckUtils.isNullOrEmpty(dealerExtCode)){
-                        String ext = ds.cekExtCode(dealerId);
-                        dealerExtCode = ext;
-
-                    } if(CheckUtils.isNullOrEmpty(dealerStatus)){
-                        String stat = ds.cekStatusDealer(dealerId);
-                        dealerStatus = stat;
-                    }
-                    int editDealer = ds.getUpdateAll(dealerId, dealerName, dealerClass, telpNumber, alamat, dealerExtCode, dealerStatus);
-                    Optional<Dealer> dealerList = ds.findbyID(dealerId);
-                    responseSave.responseSuccess(dealerList);
-                    return new ResponseEntity<>(responseSave, HttpStatus.OK);
+                //FITUR UPDATE
+            }String cek_id = ds.cekIdDealer(dealerId);
+            if(cek_id.equals(dealerId)){
+                if(CheckUtils.isNullOrEmpty(dealerClass)){
+                    String deal_class = ds.cekClassDealer(dealerId);
+                    dealerClass = deal_class;
                 }
+                if(CheckUtils.isNullOrEmpty(telpNumber)){
+                    String telp = ds.cekTelpDealer(dealerId);
+                    telpNumber = telp;
 
+                }if(CheckUtils.isNullOrEmpty(alamat)){
+                    String al = ds.cekAlamatDealer(dealerId);
+                    alamat = al;
 
+                } if(CheckUtils.isNullOrEmpty(dealerExtCode)){
+                    String ext = ds.cekExtCode(dealerId);
+                    dealerExtCode = ext;
+
+                } if(CheckUtils.isNullOrEmpty(dealerStatus)){
+                    String stat = ds.cekStatusDealer(dealerId);
+                    dealerStatus = stat;
+                }
+                int editDealer = ds.getUpdateAll(dealerId, dealerName, dealerClass, telpNumber, alamat, dealerExtCode, dealerStatus);
+                Optional<Dealer> dealerList = ds.findbyID(dealerId);
+                responseSave.responseSuccess(dealerList);
+                return new ResponseEntity<>(responseSave, HttpStatus.OK);
             }
 
         } catch (Exception e){

@@ -74,6 +74,73 @@ public class PpnService {
         return ppnById;
     }
 
+    public PpnList getActivePpn(String dealerId, Date queryDate) {
+        PpnList dealId = new PpnList();
+
+        Optional<Ppn> opt = ppnRepository.findActivePpn(dealerId, queryDate);
+
+        dealId.setPpnId(opt.get().getPpnId());
+        dealId.setDealerId(opt.get().getDealer().getDealerId());
+        dealId.setPpnDescription(opt.get().getDescription());
+        dealId.setPpnRate(opt.get().getPpnRate());
+        dealId.setPpnRatePrevious(opt.get().getPpnRatePrevious());
+        dealId.setEffectiveStartDate(opt.get().getEffectiveStartDate());
+        dealId.setEffectiveEndDate(opt.get().getEffectiveEndDate());
+        dealId.setPpnStatus(opt.get().getPpnStatus());
+
+        return dealId;
+    }
+
+    public String cekPPnIdBydealer(String dealerId){
+        return ppnRepository.cekPPnIdBydealer(dealerId);
+    }
+
+    public String cekPpnId(String ppnId){
+        return ppnRepository.cekPPnId(ppnId);
+    }
+
+    public String cekDealerId(String ppnId){
+        return ppnRepository.cekDealerId(ppnId);
+    }
+    public String cekPpnDescription(String ppnId){
+        return ppnRepository.cekPpnDescription(ppnId);
+    }
+    public String cekPpnRate(String ppnId){
+        return ppnRepository.cekPpnRate(ppnId);
+    }
+    public String cekPpnRatePrevious(String ppnId){
+        return ppnRepository.cekPpnRatePrevious(ppnId);
+    }
+    public Date cekEffectiveStartDate(String ppnId){
+        return ppnRepository.cekeffectiveStartDate(ppnId);
+    }
+    public Date cekEffectiveEndDate(String ppnId){
+        return ppnRepository.cekeffectiveEndDate(ppnId);
+    }
+
+    public String cekPpnStatus(String ppnId){
+        return ppnRepository.cekPpnStatus(ppnId);
+    }
+
+    public List<PpnList> listAllByDealer(String dealerId) {
+        List<PpnList> listAll = new ArrayList<>();
+        List<Ppn> opt = ppnRepository.listAllByDealer(dealerId);
+
+        for (int i = 0; i < opt.size(); i++) {
+            PpnList ppnList = new PpnList();
+            ppnList.setPpnId(opt.get(i).getPpnId());
+            ppnList.setDealerId(opt.get(i).getDealer().getDealerId());
+            ppnList.setPpnDescription(opt.get(i).getDescription());
+            ppnList.setPpnRate(opt.get(i).getPpnRate());
+            ppnList.setPpnRatePrevious(opt.get(i).getPpnRatePrevious());
+            ppnList.setEffectiveStartDate(opt.get(i).getEffectiveStartDate());
+            ppnList.setEffectiveEndDate(opt.get(i).getEffectiveEndDate());
+            ppnList.setPpnStatus(opt.get(i).getPpnStatus());
+            listAll.add(ppnList);
+        }
+        return listAll;
+    }
+
     public Optional<Ppn> findByPpnId(String ppnId){
         return ppnRepository.findByPpnId(ppnId);
     }

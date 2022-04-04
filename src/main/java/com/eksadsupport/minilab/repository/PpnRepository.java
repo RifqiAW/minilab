@@ -37,6 +37,42 @@ public interface PpnRepository extends JpaRepository<Ppn, String> {
     @Query(value = "SELECT * FROM mst_ppn where  dealer_code =?1 and lower(ppn_status) like %?2% LIMIT ?3 OFFSET ?4",nativeQuery = true)
     List<Ppn> listAll(String dealerId, String ppnStatus, int limit, int offset);
 
+    @Query(value = "select ppn_id from mst_ppn where ppn_id = ?1", nativeQuery = true)
+    String cekPPnId (String ppnId);
+
+    @Query(value = "select dealer_code from mst_ppn where ppn_id= ?1",nativeQuery = true)
+    String cekDealerId(String ppnId);
+
+    @Query(value = "select description from mst_ppn where ppn_id= ?1",nativeQuery = true)
+    String cekPpnDescription(String ppnId);
+
+    @Query(value = "select ppn_rate from mst_ppn where ppn_id= ?1",nativeQuery = true)
+    String cekPpnRate(String ppnId);
+
+    @Query(value = "select ppn_rate_previous from mst_ppn where ppn_id= ?1",nativeQuery = true)
+    String cekPpnRatePrevious(String ppnId);
+
+    @Query(value = "select effective_start_date from mst_ppn where ppn_id= ?1",nativeQuery = true)
+    Date cekeffectiveStartDate(String ppnId);
+
+    @Query(value = "select effective_end_date from mst_ppn where ppn_id= ?1",nativeQuery = true)
+    Date cekeffectiveEndDate(String ppnId);
+
+    @Query(value = "select ppn_status from mst_ppn where ppn_id= ?1",nativeQuery = true)
+    String cekPpnStatus(String ppnId);
+
+    @Transactional
+    @Query(value = "select dealer_code from mst_ppn where dealer_code = ?1 " +
+            "and effective_start_date = ?2 " +
+            "and ppn_status='ACTIVE' LIMIT 1", nativeQuery = true)
+    Optional<Ppn> findActivePpn(String dealerId, Date queryDate);
+
+    @Query(value = "select ppn_id from mst_ppn where dealer_code = ?1", nativeQuery = true)
+    String cekPPnIdBydealer (String dealerId);
+
+    @Transactional
+    @Query(value = "SELECT * FROM mst_ppn where dealer_code =?1",nativeQuery = true)
+    List<Ppn> listAllByDealer(String dealerId);
 
     Optional<Ppn> findByPpnId(String ppnId);
 

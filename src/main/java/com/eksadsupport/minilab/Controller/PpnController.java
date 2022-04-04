@@ -40,8 +40,8 @@ public class PpnController {
             String endDate = request.get("effectiveEndDate").toString();
             String ppnStatus = request.get("status").toString().toUpperCase(Locale.ROOT);
 
-            Locale locale = new Locale("id", "id");
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", locale);
+//            Locale locale = new Locale("id", "id");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             Date effectiveStartDate = sdf.parse(startDate);
             Date effectiveEndDate = sdf.parse(endDate);
 
@@ -50,56 +50,58 @@ public class PpnController {
                     || checkStringIfNulllOrEmpty(String.valueOf(effectiveStartDate)) || checkStringIfNulllOrEmpty(ppnStatus)){
                 return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
             }
-
+            //Insert DATA
             if(checkStringIfNulllOrEmpty(ppnId)){
                 GetPpn ppn = ppnService.savePpn(generateId(), dealerId, ppnDescription, ppnRate, ppnRatePrevious, effectiveStartDate, effectiveEndDate, ppnStatus);
                 return new ResponseEntity<>(new ResponseSuccess(ppn), HttpStatus.OK);
             }
 
-            Optional<Ppn> opt = ppnService.findByPpnId(ppnId);
+            //Update DATA
+            String cekId = ppnService.cekPpnId(ppnId);
 
-            if (opt.isPresent()){
-                return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
-            }else {
-                if(dealerId.isEmpty()){
-                    dealerId = opt.get().getDealer().getDealerId();
+            if (cekId.equals(ppnId)){
+
+                if(checkStringIfNulllOrEmpty(dealerId)){
+                    String dealer_id = ppnService.cekDealerId(ppnId);
+                    dealerId = dealerId;
                 }
-                if(ppnDescription.isEmpty()){
-                    ppnDescription = opt.get().getDescription();
+                if(checkStringIfNulllOrEmpty(ppnDescription)){
+                    String description = ppnService.cekPpnDescription(ppnId);
+                    ppnDescription = description;
                 }
-                if(String.valueOf(ppnRate).isEmpty()){
-                    ppnRate = opt.get().getPpnRate();
+                if(checkStringIfNulllOrEmpty(String.valueOf(ppnRate))){
+                    String rate = ppnService.cekPpnRate(ppnId);
+                    ppnRate = Float.valueOf(rate);
                 }
                 try {
-                    if(String.valueOf(ppnRatePrevious).isEmpty()){
-                        ppnRatePrevious = opt.get().getPpnRatePrevious();
+                    if(checkStringIfNulllOrEmpty(String.valueOf(ppnRatePrevious))){
+                        String rateprev = ppnService.cekPpnRate(ppnId);
+                        ppnRatePrevious = Float.valueOf(rateprev);
                     }
                 }catch (Exception e){
                     ppnRatePrevious = null;
                 }
-                if(String.valueOf(effectiveStartDate).isEmpty()){
-                    effectiveStartDate = opt.get().getEffectiveStartDate();
+                if(checkStringIfNulllOrEmpty(String.valueOf(effectiveStartDate))){
+                    Date effstartDate = ppnService.cekEffectiveStartDate(ppnId);
+                    effectiveStartDate = effstartDate;
                 }
                 try {
-                    if(String.valueOf(effectiveEndDate).isEmpty()){
-                        effectiveEndDate = opt.get().getEffectiveEndDate();
+                    if(checkStringIfNulllOrEmpty(String.valueOf(effectiveEndDate))){
+                        Date effEndtDate = ppnService.cekEffectiveEndDate(ppnId);
+                        effEndtDate = effEndtDate;
                     }
                 }catch (Exception e){
                     effectiveEndDate = null;
                 }
-                if(ppnStatus.isEmpty()){
-                    ppnStatus = opt.get().getPpnStatus();
+                if(checkStringIfNulllOrEmpty(ppnStatus)){
+                    String ppnStat = ppnService.cekPpnStatus(ppnId);
+                    ppnStatus = ppnStat;
                 }
-            }
-            if (checkStringIfNulllOrEmpty(String.valueOf(ppnRatePrevious))){
-                GetPpn ppn = ppnService.updatePpn(ppnId, dealerId, ppnDescription, ppnRate, ppnRate,
-                        effectiveStartDate, effectiveEndDate, ppnStatus);
-                return new ResponseEntity<>(new ResponseSuccess(ppn), HttpStatus.OK);
-            }else {
                 GetPpn ppn = ppnService.updatePpn(ppnId, dealerId, ppnDescription, ppnRate, ppnRatePrevious,
                         effectiveStartDate, effectiveEndDate, ppnStatus);
                 return new ResponseEntity<>(new ResponseSuccess(ppn), HttpStatus.OK);
             }
+
         }catch (NullPointerException ne){
             ne.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
@@ -108,6 +110,8 @@ public class PpnController {
             e.printStackTrace();
             return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
         }
+
+        return new ResponseEntity<>(new  ResponseBadRequest(), HttpStatus.BAD_REQUEST);
     }
 
     @Value("${property.max_limit}")
@@ -158,6 +162,42 @@ public class PpnController {
         try {
             PpnList ppnList= ppnService.getPpnById(ppnId);
             return new ResponseEntity<>(new ResponseSuccess(ppnList), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping("getActivePpn")
+    public ResponseEntity<Object> getActivePpn(
+            @RequestBody Map<String, Object> request
+    ) throws ParseException {
+        String dealerId = request.get("dealerId").toString();
+        String queryDate = request.get("queryDate").toString();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date querydates = sdf.parse(queryDate);
+
+        String ppid = ppnService.cekPPnIdBydealer(dealerId);
+        PpnList opt = ppnService.getActivePpn(dealerId, querydates);
+
+        System.out.println(dealerId);
+        System.out.println(opt);
+
+        if (dealerId.isEmpty()){
+            return new ResponseEntity<>(new ResponseBadRequest(), HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            if (queryDate.isEmpty()){
+                Map<String, Object> map = new LinkedHashMap<>();
+                map.put("queryDate", generateQueryDate());
+                map.put("data", ppnService.listAllByDealer(dealerId));
+
+                return new ResponseEntity<>(map, HttpStatus.OK);
+            }else {
+                PpnList ppnList= ppnService.getActivePpn(dealerId, querydates);
+                return new ResponseEntity<>(new ResponseSuccess(ppnList), HttpStatus.OK);
+            }
         }catch (Exception e){
             return new ResponseEntity<>(new ResponseNoContent(), HttpStatus.NO_CONTENT);
         }
