@@ -4,7 +4,7 @@ insert into mst_sales(sales_id, sales_name, dealer_code, supervisor_id, sales_ge
 
 insert into mst_ppn(ppn_id, description, dealer_code, effective_start_date, effective_end_date, ppn_rate, ppn_rate_previous, ppn_status) values ('1', 'Ppn tiga', '100005', '14-02-2022 16:00', '18-02-2022 19:30', 11.5, 10, 'ACTIVE');
 
-insert into mst_customer(customer_id, customer_name, dealer_code, customer_gender, customer_nik, customer_kk, customer_email, customer_address, customer_telp_number, customer_hp_number, sales_id, customer_status) values ('c1', 'Stonk', '100005', 'GTLK', 'xx', 'xxx', 'somewhere@gmail.com', 'above the ground beneath the sky', '666', '6969', 'M1', 'INACTIVE');
+insert into mst_customer(customer_id, customer_name, dealer_code, customer_gender, customer_nik, customer_kk, customer_email, customer_address, customer_telp_number, customer_hp_number, sales_id, customer_status) values ('c1', 'Stonk', '100000', 'GTLK', 'xx', 'xxx', 'somewhere@gmail.com', 'above the ground beneath the sky', '666', '6969', 'M1', 'INACTIVE');
 
 insert into mst_unit(unit_id, unit_series_name, dealer_code, unit_quantity, unit_color, unit_status, average_cost) values ('202203201010570000001', 'CBR 150', '100005', '10', 'MERAH', 'INACTIVE', 25000000);
 
