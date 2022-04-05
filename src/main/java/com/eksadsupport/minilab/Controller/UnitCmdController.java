@@ -1,5 +1,6 @@
 package com.eksadsupport.minilab.Controller;
 
+import com.eksadsupport.minilab.Common.GenerateJWT;
 import com.eksadsupport.minilab.domain.Unit;
 import com.eksadsupport.minilab.domain.ViewAllUnit;
 import com.eksadsupport.minilab.dto.response.ResponseBadRequest;
@@ -8,6 +9,7 @@ import com.eksadsupport.minilab.dto.response.ResponseSuccess;
 import com.eksadsupport.minilab.dto.unit.GetListUnit;
 import com.eksadsupport.minilab.dto.unit.GetUnit;
 import com.eksadsupport.minilab.service.UnitService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -29,8 +31,10 @@ public class UnitCmdController {
     private UnitService us;
 
     @PostMapping("/save")
-    public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload) {
+    public ResponseEntity<Object> save(@RequestBody Map<String, Object> inputPayload,
+                                       @RequestHeader(name = "token", required = false) String token) {
         try {
+            Claims claims = GenerateJWT.validateToken(token);
             String unitCode = valueToStringOrEmpty(inputPayload, "unitCode");
             String unitSeriesName = valueToStringOrEmpty(inputPayload, "unitSeriesName");
             String dealerCode = valueToStringOrEmpty(inputPayload, "dealerId");
